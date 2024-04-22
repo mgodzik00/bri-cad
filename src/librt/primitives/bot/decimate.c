@@ -37,10 +37,8 @@
 #include "rt/geom.h"
 #include "rt/primitives/bot.h"
 
-#if !defined(BRLCAD_DISABLE_GCT)
-#  include "./gct_decimation/meshdecimation.h"
-#  include "./gct_decimation/meshoptimization.h"
-#endif
+#include "mmesh/meshdecimation.h"
+#include "mmesh/meshoptimizer.h"
 
 #include "./bot_edge.h"
 
@@ -473,18 +471,12 @@ edge_can_be_decimated(struct rt_bot_internal *bot,
 }
 
 /**
- * decimate a BOT using the new GCT decimator.
+ * decimate a BOT using the new mmesh decimator.
  * `feature_size` is the smallest feature size to keep undecimated.
  * returns the number of edges removed.
  */
 size_t
-#if defined(BRLCAD_DISABLE_GCT)
-rt_bot_decimate_gct(struct rt_bot_internal *UNUSED(bot), fastf_t UNUSED(feature_size)) {
-    bu_log("GCT decimation currently disabled - can not decimate.");
-    return 0;
-#else
 rt_bot_decimate_gct(struct rt_bot_internal *bot, fastf_t feature_size) {
-    const int opt_level = 3; /* maximum */
     mdOperation mdop;
 
     RT_BOT_CK_MAGIC(bot);
@@ -497,17 +489,19 @@ rt_bot_decimate_gct(struct rt_bot_internal *bot, fastf_t feature_size) {
 		    sizeof(bot->vertices[0]), 3 * sizeof(bot->vertices[0]), bot->num_faces,
 		    bot->faces, sizeof(bot->faces[0]), 3 * sizeof(bot->faces[0]));
     mdOperationStrength(&mdop, feature_size);
-    mdOperationAddAttrib(&mdop, bot->face_normals, sizeof(bot->face_normals[0]), 3,
-			 3 * sizeof(bot->face_normals[0]), MD_ATTRIB_FLAGS_COMPUTE_NORMALS);
-    mdMeshDecimation(&mdop, MD_FLAGS_NORMAL_VERTEX_SPLITTING | MD_FLAGS_TRIANGLE_WINDING_CCW);
+    //mdOperationAddAttrib(&mdop, bot->face_normals, sizeof(bot->face_normals[0]), 3,
+//			 3 * sizeof(bot->face_normals[0]), MD_ATTRIB_FLAGS_COMPUTE_NORMALS);
+
+    int tcnt = (bu_avail_cpus() > 1) ? (int)bu_avail_cpus() - 1 : 1 ;
+    mdMeshDecimation(&mdop, tcnt, MD_FLAGS_NORMAL_VERTEX_SPLITTING | MD_FLAGS_TRIANGLE_WINDING_CCW);
 
     bot->num_vertices = mdop.vertexcount;
     bot->num_faces = mdop.tricount;
 
-    mesh_optimization(bot->num_vertices, bot->num_faces, bot->faces, sizeof(bot->faces[0]), opt_level);
+
+    moOptimizeMesh(bot->num_vertices, bot->num_faces, bot->faces, sizeof(bot->faces[0]), 3, NULL, NULL, 1, tcnt, 0);
 
     return mdop.decimationcount;
-#endif
 }
 
 /**
