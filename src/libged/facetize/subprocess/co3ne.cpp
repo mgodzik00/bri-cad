@@ -138,22 +138,22 @@ co3ne_mesh(struct rt_bot_internal **obot, struct db_i *dbip, struct rt_pnts_inte
     // of the result - if Manifold doesn't think we're there, then
     // the results won't fly for boolean evaluation and we go ahead
     // and reject.
-    manifold::Mesh gmm;
+    manifold::MeshGL64 gmm;
     for(GEO::index_t v = 0; v < gm.vertices.nb(); v++) {
 	double gm_v[3];
 	const double *p = gm.vertices.point_ptr(v);
 	for (i = 0; i < 3; i++) {
 	    gm_v[i] = p[i];
 	}
-	gmm.vertPos.push_back(glm::vec3(gm_v[0], gm_v[1], gm_v[2]));
+	gmm.vertProperties.push_back(gm_v[0]);
+	gmm.vertProperties.push_back(gm_v[1]);
+	gmm.vertProperties.push_back(gm_v[2]);
     }
     for (GEO::index_t f = 0; f < gm.facets.nb(); f++) {
-	double tri_verts[3];
 	// TODO - CW vs CCW orientation handling?
-	tri_verts[0] = gm.facets.vertex(f, 0);
-	tri_verts[1] = gm.facets.vertex(f, 2);
-	tri_verts[2] = gm.facets.vertex(f, 1);
-	gmm.triVerts.push_back(glm::ivec3(tri_verts[0], tri_verts[1], tri_verts[2]));
+	gmm.triVerts.push_back(gm.facets.vertex(f, 0));
+	gmm.triVerts.push_back(gm.facets.vertex(f, 2));
+	gmm.triVerts.push_back(gm.facets.vertex(f, 1));
     }
 
     manifold::Manifold gmanifold(gmm);
@@ -163,7 +163,7 @@ co3ne_mesh(struct rt_bot_internal **obot, struct db_i *dbip, struct rt_pnts_inte
     }
 
     // Output is manifold, make a new bot
-    manifold::Mesh omesh = gmanifold.GetMesh();
+    manifold::MeshGL64 omesh = gmanifold.GetMeshGL64();
 
     struct rt_bot_internal *nbot;
     BU_GET(nbot, struct rt_bot_internal);
@@ -173,19 +173,15 @@ co3ne_mesh(struct rt_bot_internal **obot, struct db_i *dbip, struct rt_pnts_inte
     nbot->thickness = NULL;
     nbot->face_mode = (struct bu_bitv *)NULL;
     nbot->bot_flags = 0;
-    nbot->num_vertices = (int)omesh.vertPos.size();
-    nbot->num_faces = (int)omesh.triVerts.size();
-    nbot->vertices = (double *)calloc(omesh.vertPos.size()*3, sizeof(double));;
-    nbot->faces = (int *)calloc(omesh.triVerts.size()*3, sizeof(int));
-    for (size_t j = 0; j < omesh.vertPos.size(); j++) {
-	nbot->vertices[3*j] = omesh.vertPos[j].x;
-	nbot->vertices[3*j+1] = omesh.vertPos[j].y;
-	nbot->vertices[3*j+2] = omesh.vertPos[j].z;
+    nbot->num_vertices = (int)omesh.vertProperties.size()/3;
+    nbot->num_faces = (int)omesh.triVerts.size()/3;
+    nbot->vertices = (double *)calloc(omesh.vertProperties.size(), sizeof(double));;
+    nbot->faces = (int *)calloc(omesh.triVerts.size(), sizeof(int));
+    for (size_t j = 0; j < omesh.vertProperties.size(); j++) {
+	nbot->vertices[j] = omesh.vertProperties[j];
     }
     for (size_t j = 0; j < omesh.triVerts.size(); j++) {
-	nbot->faces[3*j] = omesh.triVerts[j].x;
-	nbot->faces[3*j+1] = omesh.triVerts[j].y;
-	nbot->faces[3*j+2] = omesh.triVerts[j].z;
+	nbot->faces[j] = omesh.triVerts[j];
     }
 
     /* do decimation */

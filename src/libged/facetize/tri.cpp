@@ -80,15 +80,24 @@ bot_to_manifold(void **out, struct db_tree_state *tsp, struct rt_db_internal *ip
     if (nbot->num_vertices < 3)
 	return BRLCAD_ERROR;
 
-    manifold::Mesh bot_mesh;
-    for (size_t j = 0; j < nbot->num_vertices ; j++)
-	bot_mesh.vertPos.push_back(glm::vec3(nbot->vertices[3*j], nbot->vertices[3*j+1], nbot->vertices[3*j+2]));
+    manifold::MeshGL64 bot_mesh;
+    for (size_t j = 0; j < nbot->num_vertices ; j++) {
+	bot_mesh.vertProperties.push_back(nbot->vertices[3*j]);
+	bot_mesh.vertProperties.push_back(nbot->vertices[3*j+1]);
+	bot_mesh.vertProperties.push_back(nbot->vertices[3*j+2]);
+    }
     if (nbot->orientation == RT_BOT_CW) {
-	for (size_t j = 0; j < nbot->num_faces; j++)
-	    bot_mesh.triVerts.push_back(glm::ivec3(nbot->faces[3*j], nbot->faces[3*j+2], nbot->faces[3*j+1]));
+	for (size_t j = 0; j < nbot->num_faces; j++) {
+	    bot_mesh.triVerts.push_back(nbot->faces[3*j]);
+	    bot_mesh.triVerts.push_back(nbot->faces[3*j+2]);
+	    bot_mesh.triVerts.push_back(nbot->faces[3*j+1]);
+	}
     } else {
-	for (size_t j = 0; j < nbot->num_faces; j++)
-	    bot_mesh.triVerts.push_back(glm::ivec3(nbot->faces[3*j], nbot->faces[3*j+1], nbot->faces[3*j+2]));
+	for (size_t j = 0; j < nbot->num_faces; j++) {
+	    bot_mesh.triVerts.push_back(nbot->faces[3*j]);
+	    bot_mesh.triVerts.push_back(nbot->faces[3*j+1]);
+	    bot_mesh.triVerts.push_back(nbot->faces[3*j+2]);
+	}
     }
 
     manifold::Manifold bot_manifold = manifold::Manifold(bot_mesh);
@@ -309,7 +318,7 @@ manifold_do_bool(
 	    pn[2] = hf_ip->eqn[2];
 	    if (op == OP_INTERSECT)
 		VSCALE(pn, pn, -1);
-	    manifold::Manifold trimmed = lm->TrimByPlane(glm::vec3(pn[0], pn[1], pn[2]), hf_ip->eqn[3]);
+	    manifold::Manifold trimmed = lm->TrimByPlane(manifold::vec3(pn[0], pn[1], pn[2]), hf_ip->eqn[3]);
 	    result = new manifold::Manifold(trimmed);
 	}
 
@@ -361,8 +370,8 @@ manifold_do_bool(
 		// write out the failing inputs to files to aid in debugging
 		if (evar && strlen(evar)) {
 		    std::cerr << "Manifold op: " << (int)manifold_op << "\n";
-		    manifold::ExportMesh(std::string(tl->tr_d.td_name)+std::string(".glb"), lm->GetMesh(), {});
-		    manifold::ExportMesh(std::string(tr->tr_d.td_name)+std::string(".glb"), rm->GetMesh(), {});
+		    manifold::ExportMesh(std::string(tl->tr_d.td_name)+std::string(".glb"), lm->GetMeshGL(), {});
+		    manifold::ExportMesh(std::string(tr->tr_d.td_name)+std::string(".glb"), rm->GetMeshGL(), {});
 		    bu_exit(EXIT_FAILURE, "Exiting to avoid overwriting debug outputs from Manifold boolean failure.");
 		}
 #endif
