@@ -36,6 +36,7 @@ struct cmdtab {
     const char *name;
     tcl_func_ptr tcl_func;
     ged_func_ptr ged_func;
+    void *mged_state;
 };
 
 
