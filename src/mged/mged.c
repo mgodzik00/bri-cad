@@ -130,13 +130,13 @@ Tcl_Interp *ged_interp = (Tcl_Interp *)NULL;
  */
 static int stdfd[2] = {1, 2};
 
-
 /* Container for passing I/O data through Tcl callbacks */
 struct stdio_data {
     long fd;
     Tcl_Channel chan;
 };
 
+struct mged_state *MGED_STATE = NULL;
 
 /* FIXME: these are problematic globals */
 struct ged *GEDP = GED_NULL;
@@ -1054,6 +1054,8 @@ main(int argc, char *argv[])
     fd_set read_set;
     int result;
 #endif
+
+    BU_GET(MGED_STATE, struct mged_state);
 
     char *attach = (char *)NULL;
 

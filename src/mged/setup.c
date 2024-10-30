@@ -418,6 +418,7 @@ cmd_setup(void)
     struct bu_vls temp = BU_VLS_INIT_ZERO;
 
     for (ctp = mged_cmdtab; ctp->name != NULL; ctp++) {
+	ctp->mged_state = MGED_STATE;
 	bu_vls_strcpy(&temp, "_mged_");
 	bu_vls_strcat(&temp, ctp->name);
 

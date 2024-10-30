@@ -1380,6 +1380,8 @@ f_comm(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const c
 int
 f_quit(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    BU_PUT (MGED_STATE, struct mged_state);
+
     if (argc < 1 || 1 < argc) {
 	struct bu_vls vls = BU_VLS_INIT_ZERO;
 

@@ -84,6 +84,13 @@
 #define MGED_DB_NAME "db"
 #define MGED_INMEM_NAME ".inmem"
 
+/* global state container */
+struct mged_state {
+    struct ged *GEDP;
+    struct db_i *DBIP;
+    struct rt_wdb *WDBP;
+};
+extern struct mged_state *MGED_STATE;
 
 /* global state */
 extern struct ged *GEDP;    /* defined in mged.c */
