@@ -71,6 +71,7 @@
 #include "bu/list.h"
 #include "bu/str.h"
 #include "bu/vls.h"
+#include "ged.h"
 #include "wdb.h"
 
 /* Needed to define struct menu_item */
@@ -79,7 +80,6 @@
 /* Needed to define struct bv_scene_obj */
 #include "bv/defines.h"
 
-#include "./mged_dm.h" /* _view_state */
 
 #define MGED_DB_NAME "db"
 #define MGED_INMEM_NAME ".inmem"
@@ -96,8 +96,19 @@ struct mged_state {
 };
 extern struct mged_state *MGED_STATE;
 
+typedef int (*tcl_func_ptr)(ClientData, Tcl_Interp *, int, const char *[]);
+
+struct cmdtab {
+    uint32_t magic;
+    const char *name;
+    tcl_func_ptr tcl_func;
+    ged_func_ptr ged_func;
+    struct mged_state *s;
+};
+
+#include "./mged_dm.h" /* _view_state */
+
 /* global state */
-extern struct ged *GEDP;    /* defined in mged.c */
 extern struct db_i *DBIP;   /* defined in mged.c */
 extern struct rt_wdb *WDBP; /* defined in mged.c */
 
@@ -208,26 +219,26 @@ extern void itoa(int n, char *s, int w);
 extern void eraseobj(struct directory **dpp);
 extern void eraseobjall(struct directory **dpp);
 extern void mged_finish(int exitcode);
-extern void slewview(vect_t view_pos);
+extern void slewview(struct mged_state *s, vect_t view_pos);
 extern void mmenu_init(void);
 extern void moveHinstance(struct directory *cdp, struct directory *dp, matp_t xlate);
 extern void moveHobj(struct directory *dp, matp_t xlate);
 extern void quit(void);
 extern void refresh(void);
 extern void sedit(void);
-extern void setview(double a1, double a2, double a3);
+extern void setview(struct mged_state *s, double a1, double a2, double a3);
 extern void adcursor(void);
 extern void mmenu_display(int y_top);
 extern void mmenu_set(int idx, struct menu_item *value);
 extern void mmenu_set_all(int idx, struct menu_item *value);
 extern void sedit_menu(void);
-extern void get_attached(void);
+extern void get_attached(struct mged_state *s);
 extern void (*cur_sigint)(int);	/* Current SIGINT status */
 extern void sig2(int);
 extern void sig3(int);
 
 extern void aexists(const char *name);
-extern int release(char *name, int need_close);
+extern int release(struct mged_state *s, char *name, int need_close);
 
 /* mged.c */
 extern void mged_view_callback(struct bview *gvp, void *clientData);
@@ -237,7 +248,7 @@ extern void button(int bnum);
 extern void press(char *str);
 extern char *label_button(int bnum);
 extern int not_state(int desired, char *str);
-extern int chg_state(int from, int to, char *str);
+extern int chg_state(struct mged_state *s, int from, int to, char *str);
 extern void state_err(char *str);
 
 extern int invoke_db_wrapper(Tcl_Interp *interpreter, int argc, const char *argv[]);
@@ -452,7 +463,7 @@ extern struct run_rt head_run_rt;
 
 /* attach.c */
 int is_dm_null(void);
-int mged_attach(const char *wp_name, int argc, const char *argv[]);
+int mged_attach(struct mged_state *s, const char *wp_name, int argc, const char *argv[]);
 void mged_link_vars(struct mged_dm *p);
 void mged_slider_free_vls(struct mged_dm *p);
 int gui_setup(const char *dstr);
@@ -475,7 +486,7 @@ int extract_mater_from_line(
 int mged_erot_xyz(char origin, vect_t rvec);
 int mged_svbase(void);
 int mged_vrot_xyz(char origin, char coords, vect_t rvec);
-void size_reset(void);
+void size_reset(struct mged_state *s);
 void solid_list_callback(void);
 
 extern void view_ring_init(struct _view_state *vsp1, struct _view_state *vsp2); /* defined in chgview.c */

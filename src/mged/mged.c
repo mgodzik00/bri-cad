@@ -139,7 +139,6 @@ struct stdio_data {
 struct mged_state *MGED_STATE = NULL;
 
 /* FIXME: these are problematic globals */
-struct ged *GEDP = GED_NULL;
 struct db_i *DBIP = DBI_NULL;	/* database instance pointer */
 struct rt_wdb *WDBP = RT_WDB_NULL;
 

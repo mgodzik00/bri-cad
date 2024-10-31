@@ -441,7 +441,7 @@ struct mged_dm {
 
 /* If we're changing the active DM, use this function so
  * libged also gets the word. */
-extern void set_curr_dm(struct mged_dm *nl);
+extern void set_curr_dm(struct mged_state *s, struct mged_dm *nl);
 
 #define MGED_DM_NULL ((struct mged_dm *)NULL)
 #define DMP mged_curr_dm->dm_dmp
@@ -572,7 +572,7 @@ extern int doEvent(ClientData, void *);
 #endif
 
 /* defined in attach.c */
-extern void dm_var_init(struct mged_dm *target_dm);
+extern void dm_var_init(struct mged_state *s, struct mged_dm *target_dm);
 
 /* defined in dm-generic.c */
 extern int common_dm(int argc, const char *argv[]);

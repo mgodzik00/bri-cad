@@ -29,7 +29,6 @@
 #include "vmath.h"
 
 #include "./mged.h"
-#include "./mged_dm.h"
 #include "./sedit.h"
 
 /* external sp_hook function */
@@ -376,55 +375,67 @@ bv_rate_toggle(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UN
 
 
 int
-bv_top(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_top(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     /* Top view */
-    setview(0.0, 0.0, 0.0);
+    setview(ctp->s, 0.0, 0.0, 0.0);
     return TCL_OK;
 }
 
 
 int
-bv_bottom(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_bottom(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     /* Bottom view */
-    setview(180.0, 0.0, 0.0);
+    setview(ctp->s, 180.0, 0.0, 0.0);
     return TCL_OK;
 }
 
 
 int
-bv_right(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_right(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     /* Right view */
-    setview(270.0, 0.0, 0.0);
+    setview(ctp->s, 270.0, 0.0, 0.0);
     return TCL_OK;
 }
 
 
 int
-bv_left(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_left(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     /* Left view */
-    setview(270.0, 0.0, 180.0);
+    setview(ctp->s, 270.0, 0.0, 180.0);
     return TCL_OK;
 }
 
 
 int
-bv_front(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_front(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     /* Front view */
-    setview(270.0, 0.0, 270.0);
+    setview(ctp->s, 270.0, 0.0, 270.0);
     return TCL_OK;
 }
 
 
 int
-bv_rear(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_rear(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     /* Rear view */
-    setview(270.0, 0.0, 90.0);
+    setview(ctp->s, 270.0, 0.0, 90.0);
     return TCL_OK;
 }
 
@@ -481,40 +492,46 @@ bv_adcursor(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSE
 
 
 int
-bv_reset(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
+bv_reset(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     /* Reset view such that all solids can be seen */
-    size_reset();
-    setview(0.0, 0.0, 0.0);
+    size_reset(ctp->s);
+    setview(ctp->s, 0.0, 0.0, 0.0);
     (void)mged_svbase();
     return TCL_OK;
 }
 
 
 int
-bv_45_45(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
-    setview(270.0+45.0, 0.0, 270.0-45.0);
+bv_45_45(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    setview(ctp->s, 270.0+45.0, 0.0, 270.0-45.0);
     return TCL_OK;
 }
 
 
 int
-bv_35_25(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
+bv_35_25(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     /* Use Azimuth=35, Elevation=25 in GIFT's backwards space */
-    setview(270.0+25.0, 0.0, 270.0-35.0);
+    setview(ctp->s, 270.0+25.0, 0.0, 270.0-35.0);
     return TCL_OK;
 }
 
 
 /* returns 0 if error, !0 if success */
 static int
-ill_common(void) {
+ill_common(struct mged_state *s) {
     struct display_list *gdlp;
     struct display_list *next_gdlp;
     int is_empty = 1;
 
     /* Common part of illumination */
-    gdlp = BU_LIST_NEXT(display_list, GEDP->ged_gdp->gd_headDisplay);
-    while (BU_LIST_NOT_HEAD(gdlp, GEDP->ged_gdp->gd_headDisplay)) {
+    gdlp = BU_LIST_NEXT(display_list, s->GEDP->ged_gdp->gd_headDisplay);
+    while (BU_LIST_NOT_HEAD(gdlp, s->GEDP->ged_gdp->gd_headDisplay)) {
 	next_gdlp = BU_LIST_PNEXT(display_list, gdlp);
 
 	if (BU_LIST_NON_EMPTY(&gdlp->dl_head_scene_obj)) {
@@ -543,13 +560,16 @@ ill_common(void) {
 
 
 int
-be_o_illuminate(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+be_o_illuminate(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+
     if (not_state(ST_VIEW, "Matrix Illuminate"))
 	return TCL_ERROR;
 
-    if (ill_common()) {
-	(void)chg_state(ST_VIEW, ST_O_PICK, "Matrix Illuminate");
+    if (ill_common(ctp->s)) {
+	(void)chg_state(ctp->s, ST_VIEW, ST_O_PICK, "Matrix Illuminate");
     }
     /* reset accumulation local scale factors */
     acc_sc[0] = acc_sc[1] = acc_sc[2] = 1.0;
@@ -561,13 +581,16 @@ be_o_illuminate(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int U
 
 
 int
-be_s_illuminate(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+be_s_illuminate(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
-    if (not_state(ST_VIEW, "Primitive Illuminate"))
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+
+   if (not_state(ST_VIEW, "Primitive Illuminate"))
 	return TCL_ERROR;
 
-    if (ill_common()) {
-	(void)chg_state(ST_VIEW, ST_S_PICK, "Primitive Illuminate");
+    if (ill_common(ctp->s)) {
+	(void)chg_state(ctp->s, ST_VIEW, ST_S_PICK, "Primitive Illuminate");
     }
     return TCL_OK;
 }
@@ -710,8 +733,11 @@ be_o_rotate(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSE
 
 
 int
-be_accept(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+
     if (STATE == ST_S_EDIT) {
 	/* Accept a solid edit */
 	edsol = 0;
@@ -721,12 +747,12 @@ be_accept(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(
 	mmenu_set_all(MENU_L1, MENU_NULL);
 	mmenu_set_all(MENU_L2, MENU_NULL);
 
-	dl_set_iflag(GEDP->ged_gdp->gd_headDisplay, DOWN);
+	dl_set_iflag(ctp->s->GEDP->ged_gdp->gd_headDisplay, DOWN);
 
 	illum_gdlp = GED_DISPLAY_LIST_NULL;
 	illump = NULL;
 	mged_color_soltab();
-	(void)chg_state(ST_S_EDIT, ST_VIEW, "Edit Accept");
+	(void)chg_state(ctp->s, ST_S_EDIT, ST_VIEW, "Edit Accept");
     }  else if (STATE == ST_O_EDIT) {
 	/* Accept an object edit */
 	edobj = 0;
@@ -739,7 +765,7 @@ be_accept(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(
 	illum_gdlp = GED_DISPLAY_LIST_NULL;
 	illump = NULL;
 	mged_color_soltab();
-	(void)chg_state(ST_O_EDIT, ST_VIEW, "Edit Accept");
+	(void)chg_state(ctp->s, ST_O_EDIT, ST_VIEW, "Edit Accept");
     } else {
 	if (not_state(ST_S_EDIT, "Edit Accept"))
 	    return TCL_ERROR;
@@ -764,8 +790,11 @@ be_accept(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(
 
 
 int
-be_reject(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+be_reject(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+
     update_views = 1;
     dm_set_dirty(DMP, 1);
 
@@ -806,10 +835,10 @@ be_reject(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(
     illump = NULL;		/* None selected */
 
     /* Clear illumination flags */
-    dl_set_iflag(GEDP->ged_gdp->gd_headDisplay, DOWN);
+    dl_set_iflag(ctp->s->GEDP->ged_gdp->gd_headDisplay, DOWN);
 
     mged_color_soltab();
-    (void)chg_state(STATE, ST_VIEW, "Edit Reject");
+    (void)chg_state(ctp->s, STATE, ST_VIEW, "Edit Reject");
 
     for (size_t i = 0; i < BU_PTBL_LEN(&active_dm_set); i++) {
 	struct mged_dm *m_dmp = (struct mged_dm *)BU_PTBL_GET(&active_dm_set, i);
@@ -946,7 +975,7 @@ stateChange(int UNUSED(oldstate), int newstate)
  * Returns !0 and prints error message if error.
  */
 int
-chg_state(int from, int to, char *str)
+chg_state(struct mged_state *s, int from, int to, char *str)
 {
     struct mged_dm *save_dm_list;
     struct bu_vls vls = BU_VLS_INIT_ZERO;
@@ -963,12 +992,12 @@ chg_state(int from, int to, char *str)
     save_dm_list = mged_curr_dm;
     for (size_t i = 0; i < BU_PTBL_LEN(&active_dm_set); i++) {
 	struct mged_dm *p = (struct mged_dm *)BU_PTBL_GET(&active_dm_set, i);
-	set_curr_dm(p);
+	set_curr_dm(s, p);
 
 	new_mats();
     }
 
-    set_curr_dm(save_dm_list);
+    set_curr_dm(s, save_dm_list);
 
     bu_vls_printf(&vls, "%s(state)", MGED_DISPLAY_VAR);
     Tcl_SetVar(INTERP, bu_vls_addr(&vls), state_str[STATE], TCL_GLOBAL_ONLY);

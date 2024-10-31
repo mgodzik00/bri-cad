@@ -412,13 +412,13 @@ static struct cmdtab mged_cmdtab[] = {
  * Register all MGED commands.
  */
 static void
-cmd_setup(void)
+cmd_setup(struct mged_state *s)
 {
     struct cmdtab *ctp;
     struct bu_vls temp = BU_VLS_INIT_ZERO;
 
     for (ctp = mged_cmdtab; ctp->name != NULL; ctp++) {
-	ctp->mged_state = MGED_STATE;
+	ctp->s = s;
 	bu_vls_strcpy(&temp, "_mged_");
 	bu_vls_strcat(&temp, ctp->name);
 
@@ -472,26 +472,29 @@ mged_setup(Tcl_Interp **interpreter)
     }
     bu_vls_free(&tlog);
 
-    BU_GET(GEDP, struct ged);
-    GED_INIT(GEDP, NULL);
-    GEDP->ged_output_handler = mged_output_handler;
-    GEDP->ged_refresh_handler = mged_refresh_handler;
-    GEDP->ged_create_vlist_scene_obj_callback = createDListSolid;
-    GEDP->ged_create_vlist_display_list_callback = createDListAll;
-    GEDP->ged_destroy_vlist_callback = freeDListsAll;
-    GEDP->ged_create_io_handler = &tclcad_create_io_handler;
-    GEDP->ged_delete_io_handler = &tclcad_delete_io_handler;
-    GEDP->ged_pre_opendb_callback = &mged_pre_opendb_clbk;
-    GEDP->ged_post_opendb_callback = &mged_post_opendb_clbk;
-    GEDP->ged_pre_closedb_callback = &mged_pre_closedb_clbk;
-    GEDP->ged_post_closedb_callback = &mged_post_closedb_clbk;
-    GEDP->ged_db_callback_udata = &mged_global_db_ctx;
-    GEDP->ged_interp = (void *)interpreter;
-    GEDP->ged_interp_eval = &mged_db_search_callback;
+    BU_GET(MGED_STATE, struct mged_state);
+    struct mged_state *s = MGED_STATE;
+
+    BU_GET(s->GEDP, struct ged);
+    GED_INIT(s->GEDP, NULL);
+    s->GEDP->ged_output_handler = mged_output_handler;
+    s->GEDP->ged_refresh_handler = mged_refresh_handler;
+    s->GEDP->ged_create_vlist_scene_obj_callback = createDListSolid;
+    s->GEDP->ged_create_vlist_display_list_callback = createDListAll;
+    s->GEDP->ged_destroy_vlist_callback = freeDListsAll;
+    s->GEDP->ged_create_io_handler = &tclcad_create_io_handler;
+    s->GEDP->ged_delete_io_handler = &tclcad_delete_io_handler;
+    s->GEDP->ged_pre_opendb_callback = &mged_pre_opendb_clbk;
+    s->GEDP->ged_post_opendb_callback = &mged_post_opendb_clbk;
+    s->GEDP->ged_pre_closedb_callback = &mged_pre_closedb_clbk;
+    s->GEDP->ged_post_closedb_callback = &mged_post_closedb_clbk;
+    s->GEDP->ged_db_callback_udata = &mged_global_db_ctx;
+    s->GEDP->ged_interp = (void *)interpreter;
+    s->GEDP->ged_interp_eval = &mged_db_search_callback;
     struct tclcad_io_data *t_iod = tclcad_create_io_data();
     t_iod->io_mode = TCL_READABLE;
     t_iod->interp = *interpreter;
-    GEDP->ged_io_data = t_iod;
+    s->GEDP->ged_io_data = t_iod;
 
     /* Set up the default state of the standard open/close db container */
     mged_global_db_ctx.argc = 0;
@@ -518,10 +521,10 @@ mged_setup(Tcl_Interp **interpreter)
 
     bv_set_add_view(&GEDP->ged_views, view_state->vs_gvp);
     bu_ptbl_ins(&GEDP->ged_free_views, (long *)view_state->vs_gvp);
-    GEDP->ged_gvp = view_state->vs_gvp;
+    s->GEDP->ged_gvp = view_state->vs_gvp;
 
     /* register commands */
-    cmd_setup();
+    cmd_setup(s);
 
     history_setup();
     mged_global_variable_setup(*interpreter);
