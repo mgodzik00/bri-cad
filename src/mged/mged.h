@@ -84,6 +84,9 @@
 #define MGED_DB_NAME "db"
 #define MGED_INMEM_NAME ".inmem"
 
+
+#define MGED_CMD_MAGIC 0x4D474544 /**< MGED */
+
 /* global state container */
 struct mged_state {
     struct ged *GEDP;
