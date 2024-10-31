@@ -1951,6 +1951,7 @@ int
 wdb_cmd(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
     struct rt_wdb *wdbp = (struct rt_wdb *)clientData;
+    RT_CHECK_WDB(wdbp);
     struct ged ged; // Use a local ged struct to avoid needing global MGED state
     struct bu_hook_list save_hook_list = BU_HOOK_LIST_INIT_ZERO;
     int ret;
