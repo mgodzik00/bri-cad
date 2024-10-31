@@ -240,6 +240,7 @@ cmd_ged_edit_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
     int ret;
     const char *av[3];
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
 
     if (GEDP == GED_NULL)
 	return TCL_OK;
@@ -272,6 +273,7 @@ cmd_ged_simulate_wrapper(ClientData clientData, Tcl_Interp *interpreter, int arg
     int ret;
     const char *av[3];
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
 
     if (GEDP == GED_NULL)
 	return TCL_OK;
@@ -301,6 +303,7 @@ cmd_ged_info_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
 {
     const char **av;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     struct ged_bv_data *bdata = NULL;
 
     if (GEDP == GED_NULL)
@@ -339,6 +342,7 @@ cmd_ged_erase_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, 
 {
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
 
     if (GEDP == GED_NULL)
 	return TCL_OK;
@@ -364,6 +368,7 @@ cmd_ged_gqa(ClientData clientData, Tcl_Interp *interpreter, int argc, const char
     int i;
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     size_t args;
 
     if (GEDP == GED_NULL)
@@ -434,6 +439,7 @@ cmd_ged_in(ClientData clientData, Tcl_Interp *interpreter, int argc, const char 
 {
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     const char *new_cmd[3];
     int c;
     int do_solid_edit = 0;
@@ -633,6 +639,7 @@ cmd_ged_more_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
 {
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
     const char *new_cmd[3];
 
     if (GEDP == GED_NULL)
@@ -685,6 +692,7 @@ cmd_ged_plain_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, 
 {
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
 
     if (GEDP == GED_NULL)
 	return TCL_OK;
@@ -771,6 +779,7 @@ cmd_ged_view_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
 {
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
 
     if (GEDP == GED_NULL)
 	return TCL_OK;
@@ -799,6 +808,7 @@ cmd_ged_dm_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, con
 {
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
 
     if (GEDP == GED_NULL)
 	return TCL_OK;

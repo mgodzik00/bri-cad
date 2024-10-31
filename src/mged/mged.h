@@ -86,6 +86,7 @@
 
 
 #define MGED_CMD_MAGIC 0x4D474544 /**< MGED */
+#define MGED_CK_CMD(_bp) BU_CKMAG(_bp, MGED_CMD_MAGIC , "cmdtab")
 
 /* global state container */
 struct mged_state {
