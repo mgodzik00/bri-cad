@@ -612,7 +612,7 @@ _dm_cmd_attach(void *ds, int argc, const char **argv)
     }
 
     const char *acmd = "attach";
-    struct dm *dmp = dm_open(gedp->ged_ctx, gedp->ged_interp, argv[0], 1, &acmd);
+    struct dm *dmp = dm_open(gedp->ged_ctx, gedp->cmd_interp, argv[0], 1, &acmd);
     if (!dmp) {
 	bu_vls_printf(gedp->ged_result_str, "failed to create DM %s", bu_vls_cstr(&dm_name));
 	bu_vls_free(&dm_name);

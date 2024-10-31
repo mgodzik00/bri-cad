@@ -474,6 +474,7 @@ mged_setup(Tcl_Interp **interpreter)
 
     BU_GET(MGED_STATE, struct mged_state);
     struct mged_state *s = MGED_STATE;
+    s->interp = interpreter;
 
     BU_GET(s->GEDP, struct ged);
     GED_INIT(s->GEDP, NULL);
@@ -489,7 +490,8 @@ mged_setup(Tcl_Interp **interpreter)
     s->GEDP->ged_pre_closedb_callback = &mged_pre_closedb_clbk;
     s->GEDP->ged_post_closedb_callback = &mged_post_closedb_clbk;
     s->GEDP->ged_db_callback_udata = &mged_global_db_ctx;
-    s->GEDP->ged_interp = (void *)interpreter;
+    s->GEDP->cmd_interp = (void *)interpreter;
+    s->GEDP->search_ctx = (void *)s;
     s->GEDP->ged_interp_eval = &mged_db_search_callback;
     struct tclcad_io_data *t_iod = tclcad_create_io_data();
     t_iod->io_mode = TCL_READABLE;

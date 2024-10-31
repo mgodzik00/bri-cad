@@ -251,7 +251,10 @@ ged_init(struct ged *gedp)
     gedp->dbi_state = NULL;
 
     gedp->ged_ctx = NULL;
-    gedp->ged_interp = NULL;
+    gedp->cmd_interp = NULL;
+
+    gedp->search_ctx = NULL;
+    gedp->ged_search_eval = NULL;
 }
 
 

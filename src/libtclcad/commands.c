@@ -1259,7 +1259,7 @@ to_open_tcl(ClientData UNUSED(clientData),
 	Tcl_AppendResult(interp, "Unable to open geometry database: ", dbname, (char *)NULL);
 	return TCL_ERROR;
     }
-    gedp->ged_interp = (void *)interp;
+    gedp->cmd_interp = (void *)interp;
 
     /* Set the Tcl specific I/O handlers for asynchronous subprocess I/O */
     struct tclcad_io_data *t_iod = tclcad_create_io_data();

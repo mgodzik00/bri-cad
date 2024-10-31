@@ -93,6 +93,7 @@ struct mged_state {
     struct ged *GEDP;
     struct db_i *DBIP;
     struct rt_wdb *WDBP;
+    Tcl_Interp *interp;
 };
 extern struct mged_state *MGED_STATE;
 

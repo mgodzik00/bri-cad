@@ -196,6 +196,9 @@ mged_pr_output(Tcl_Interp *interp)
 int
 mged_db_search_callback(int argc, const char *argv[], void *userdata)
 {
+    struct mged_state *s = (struct mged_state *)userdata;
+    Tcl_Interp *interp = s->interp;
+
     /* FIXME: pretty much copied from tclcad, ideally this should call
      * tclcad's eval instead of doing its own thing but this is probably
      * fine for now */
@@ -213,17 +216,17 @@ mged_db_search_callback(int argc, const char *argv[], void *userdata)
     for (i = 1; i < argc; ++i)
 	Tcl_DStringAppendElement(&script, argv[i]);
 
-    ret = Tcl_Eval((Tcl_Interp *)userdata, Tcl_DStringValue(&script));
+    ret = Tcl_Eval(interp, Tcl_DStringValue(&script));
     Tcl_DStringFree(&script);
 
-    result = Tcl_GetStringResult((Tcl_Interp *)userdata);
+    result = Tcl_GetStringResult(interp);
     len = strlen(result);
     if (len > 0)
 	bu_log("%s%s", result, result[len-1] == '\n' ? "" : "\n");
 
-    Tcl_ResetResult((Tcl_Interp *)userdata);
+    Tcl_ResetResult(interp);
 
-    /* NOTE: Tcl_Eval saves the last -exec result to s->GEDP->ged_result_str 
+    /* NOTE: Tcl_Eval saves the last -exec result to s->GEDP->ged_result_str
        this causes a duplicate print of the last 'search -exec' in mged (since
        we're bu_logging here and then the ged_result_str is later flushed).
        To fix this, we need to clear the ged_result_str

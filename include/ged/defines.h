@@ -366,8 +366,11 @@ struct ged {
     // ged_ctx_get(const char *dm_type)
     void *ged_ctx; /* Temporary - do not rely on when designing new functionality */
 
-    void *ged_interp; /* Temporary - do not rely on when designing new functionality */
-    db_search_callback_t ged_interp_eval; /* FIXME: broke the rule written on the previous line */
+    void *cmd_interp; /* Temporary - do not rely on when designing new functionality */
+
+    // Info for search callbacks
+    void *search_ctx;
+    db_search_callback_t ged_search_eval; /* FIXME: broke the rule written on the previous line */
 
 };
 

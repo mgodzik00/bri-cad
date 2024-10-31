@@ -97,15 +97,6 @@ struct ged_search {
     int search_type;
 };
 
-
-static db_search_callback_t
-ged_get_interp_eval_callback(struct ged *gedp)
-{
-    /* FIXME this might need to be more robust? */
-    return gedp->ged_interp_eval;
-}
-
-
 static int
 _path_scrub(struct bu_vls *prefix, struct bu_vls *path)
 {
@@ -371,8 +362,8 @@ ged_search_core(struct ged *gedp, int argc, const char *argv_orig[])
     char **argv = NULL;
     struct db_search_context *ctx = db_search_context_create();
 
-    db_search_register_data(ctx, (void *)gedp->ged_interp);
-    db_search_register_exec(ctx, ged_get_interp_eval_callback(gedp));
+    db_search_register_data(ctx, (void *)gedp->search_ctx);
+    db_search_register_exec(ctx, gedp->ged_search_eval);
 
 
     /* Find how many options we have. Once we get support
