@@ -493,7 +493,7 @@ extern void view_ring_init(struct _view_state *vsp1, struct _view_state *vsp2); 
 extern void view_ring_destroy(struct mged_dm *dlp);
 
 /* cmd.c */
-int cmdline(struct bu_vls *vp, int record);
+int cmdline(struct mged_state *s, struct bu_vls *vp, int record);
 int mged_cmd(int argc, const char *argv[], struct funtab in_functions[]);
 void mged_print_result(int status);
 int gui_output(void *clientData, void *str);
