@@ -472,7 +472,7 @@ mged_attach(struct mged_state *s, const char *wp_name, int argc, const char *arg
 	const char name[] = "name";
 	void *base = 0;
 	const char value[] = "value";
-	cs_set_bg(sdp, name, base, value, NULL);
+	cs_set_bg(sdp, name, base, value, s);
     }
 
     mged_link_vars(mged_curr_dm);
