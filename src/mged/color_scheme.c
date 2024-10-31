@@ -260,7 +260,7 @@ cs_update(const struct bu_structparse *sdp,
 	  const char *value,
 	  void *data)
 {
-    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    struct cmdtab *ctp = (struct cmdtab *)data;
     MGED_CK_CMD(ctp);
     struct bu_structparse *sp;
     struct bu_vls vls = BU_VLS_INIT_ZERO;
@@ -317,7 +317,7 @@ cs_set_bg(const struct bu_structparse *UNUSED(sdp),
     }
 
     bu_vls_free(&vls);
-    set_curr_dm(save_curr_m_dmp);
+    set_curr_dm(s, save_curr_m_dmp);
     s->GEDP->ged_gvp = cbv;
 }
 

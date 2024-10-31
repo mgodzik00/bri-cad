@@ -596,8 +596,11 @@ get_attached(struct mged_state *s)
  * Run a display manager specific command(s).
  */
 int
-f_dm(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
+f_dm(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     struct bu_vls vls = BU_VLS_INIT_ZERO;
 
     if (argc < 2) {
@@ -642,7 +645,7 @@ f_dm(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const cha
     }
 
 
-    return cmd_hook(argc-1, argv+1);
+    return cmd_hook(argc-1, argv+1, (void *)s);
 }
 
 

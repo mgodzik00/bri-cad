@@ -434,7 +434,7 @@ struct mged_dm {
     struct _dlist_state	*dm_dlist_state;
 
     /* Hooks */
-    int			(*dm_cmd_hook)(int, const char **);
+    int			(*dm_cmd_hook)(int, const char **, void *);
     void			(*dm_viewpoint_hook)(void);
     int			(*dm_eventHandler)(void);
 };
@@ -575,7 +575,7 @@ extern int doEvent(ClientData, void *);
 extern void dm_var_init(struct mged_state *s, struct mged_dm *target_dm);
 
 /* defined in dm-generic.c */
-extern int common_dm(int argc, const char *argv[]);
+extern int common_dm(struct mged_state *s, int argc, const char *argv[]);
 extern void view_state_flag_hook(const struct bu_structparse *, const char *, void *,const char *, void *);
 extern void dirty_hook(const struct bu_structparse *, const char *, void *,const char *, void *);
 extern void zclip_hook(const struct bu_structparse *, const char *, void *,const char *, void *);
@@ -597,7 +597,7 @@ struct mged_view_hook_state {
 };
 extern void *set_hook_data(struct mged_view_hook_state *hs);
 
-int dm_commands(int argc, const char *argv[]);
+int dm_commands(int argc, const char *argv[], void *data);
 
 
 #endif /* MGED_MGED_DM_H */

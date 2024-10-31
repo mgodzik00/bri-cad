@@ -52,7 +52,7 @@ extern point_t e_axes_pos;
 extern point_t curr_e_axes_pos;
 
 int
-common_dm(int argc, const char *argv[])
+common_dm(struct mged_state *s, int argc, const char *argv[])
 {
     int status;
     struct bu_vls vls = BU_VLS_INIT_ZERO;
@@ -63,9 +63,9 @@ common_dm(int argc, const char *argv[])
     if (BU_STR_EQUAL(argv[0], "idle")) {
 
 	/* redraw after scaling */
-	if (GEDP && GEDP->ged_gvp &&
-	    GEDP->ged_gvp->gv_s->adaptive_plot_csg &&
-	    GEDP->ged_gvp->gv_s->redraw_on_zoom &&
+	if (s->GEDP && s->GEDP->ged_gvp &&
+	    s->GEDP->ged_gvp->gv_s->adaptive_plot_csg &&
+	    s->GEDP->ged_gvp->gv_s->redraw_on_zoom &&
 	    (am_mode == AMM_SCALE ||
 	     am_mode == AMM_CON_SCALE_X ||
 	     am_mode == AMM_CON_SCALE_Y ||
@@ -649,9 +649,9 @@ struct bu_structparse_map vparse_map[] = {
 };
 
 int
-dm_commands(int argc,
-       const char *argv[])
+dm_commands(int argc, const char *argv[], void *data)
 {
+    struct mged_state *s = (struct mged_state *)data;
     struct dm_hook_data mged_dm_hook;
     if (BU_STR_EQUAL(argv[0], "set")) {
 	struct bu_vls vls = BU_VLS_INIT_ZERO;
@@ -675,9 +675,9 @@ dm_commands(int argc,
 		struct bu_vls tmp_vls = BU_VLS_INIT_ZERO;
 		int ret;
 		struct mged_view_hook_state global_hs;
-		void *data = set_hook_data(&global_hs);
+		void *hdata = set_hook_data(&global_hs);
 
-		ret = dm_set_hook(vparse_map, argv[1], data, &mged_dm_hook);
+		ret = dm_set_hook(vparse_map, argv[1], hdata, &mged_dm_hook);
 		if (ret < 0) {
 		    bu_log("Warning - failed to set dm hook - dm-generic.c:%d\n", __LINE__);
 		}
@@ -700,7 +700,7 @@ dm_commands(int argc,
 	return TCL_OK;
     }
 
-    return common_dm(argc, argv);
+    return common_dm(s, argc, argv);
 }
 
 /*
