@@ -2568,7 +2568,7 @@ mged_zoom(struct mged_state *s, double val)
     if (s->GEDP->ged_gvp && s->GEDP->ged_gvp->gv_s->adaptive_plot_csg &&
 	s->GEDP->ged_gvp->gv_s->redraw_on_zoom)
     {
-	ret = redraw_visible_objects();
+	ret = redraw_visible_objects(s);
     }
 
     view_state->vs_flag = 1;

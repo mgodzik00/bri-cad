@@ -51,7 +51,7 @@
           BU_LIST_INIT( &((p)->s_vlist) ); }
 
 void
-cvt_vlblock_to_solids(struct bv_vlblock *vbp, const char *name, int copy)
+cvt_vlblock_to_solids(struct mged_state *s, struct bv_vlblock *vbp, const char *name, int copy)
 {
     size_t i;
     char shortname[32];
@@ -65,20 +65,20 @@ cvt_vlblock_to_solids(struct bv_vlblock *vbp, const char *name, int copy)
 	av[0] = "erase";
 	av[1] = shortname;
 	av[2] = NULL;
-	(void)ged_exec(GEDP, 2, (const char **)av);
+	(void)ged_exec(s->GEDP, 2, (const char **)av);
     } else {
 	av[0] = "kill";
 	av[1] = "-f";
 	av[2] = shortname;
 	av[3] = NULL;
-	(void)ged_exec(GEDP, 3, (const char **)av);
+	(void)ged_exec(s->GEDP, 3, (const char **)av);
     }
 
     for (i=0; i < vbp->nused; i++) {
 	if (BU_LIST_IS_EMPTY(&(vbp->head[i]))) continue;
 
 	snprintf(namebuf, sizeof(namebuf), "%s%lx",	shortname, vbp->rgb[i]);
-	invent_solid(GEDP, namebuf, &vbp->head[i], vbp->rgb[i], copy, 1.0, 0, 0);
+	invent_solid(s->GEDP, namebuf, &vbp->head[i], vbp->rgb[i], copy, 1.0, 0, 0);
     }
 }
 
@@ -124,14 +124,14 @@ mged_bound_solid(struct bv_scene_obj *sp)
  * This routine must be prepared to run in parallel.
  */
 void
-drawH_part2(int dashflag, struct bu_list *vhead, const struct db_full_path *pathp, struct db_tree_state *tsp, struct bv_scene_obj *existing_sp)
+drawH_part2(struct mged_state *s, int dashflag, struct bu_list *vhead, const struct db_full_path *pathp, struct db_tree_state *tsp, struct bv_scene_obj *existing_sp)
 {
     struct display_list *gdlp;
     struct bv_scene_obj *sp;
 
     if (!existing_sp) {
 	/* Handling a new solid */
-	struct bv_scene_obj *free_scene_obj = bv_set_fsos(&GEDP->ged_views);
+	struct bv_scene_obj *free_scene_obj = bv_set_fsos(&s->GEDP->ged_views);
 	GET_BV_SCENE_OBJ(sp, &free_scene_obj->l);
 	BU_LIST_APPEND(&free_scene_obj->l, &((sp)->l) );
 	sp->s_dlist = 0;
@@ -186,7 +186,7 @@ drawH_part2(int dashflag, struct bu_list *vhead, const struct db_full_path *path
 	bu_semaphore_acquire(RT_SEM_MODEL);
 
 	/* Grab the last display list */
-	gdlp = BU_LIST_PREV(display_list, GEDP->ged_gdp->gd_headDisplay);
+	gdlp = BU_LIST_PREV(display_list, s->GEDP->ged_gdp->gd_headDisplay);
 	BU_LIST_APPEND(gdlp->dl_head_scene_obj.back, &sp->l);
 
 	bu_semaphore_release(RT_SEM_MODEL);
@@ -206,7 +206,7 @@ drawH_part2(int dashflag, struct bu_list *vhead, const struct db_full_path *path
  * 0 OK
  */
 int
-replot_original_solid(struct bv_scene_obj *sp)
+replot_original_solid(struct mged_state *s, struct bv_scene_obj *sp)
 {
     struct rt_db_internal intern;
     struct directory *dp;
@@ -232,7 +232,7 @@ replot_original_solid(struct bv_scene_obj *sp)
     }
     RT_CK_DB_INTERNAL(&intern);
 
-    if (replot_modified_solid(sp, &intern, bn_mat_identity) < 0) {
+    if (replot_modified_solid(s, sp, &intern, bn_mat_identity) < 0) {
 	rt_db_free_internal(&intern);
 	return -1;
     }
@@ -253,9 +253,10 @@ replot_original_solid(struct bv_scene_obj *sp)
  */
 int
 replot_modified_solid(
-    struct bv_scene_obj *sp,
-    struct rt_db_internal *ip,
-    const mat_t mat)
+	struct mged_state *s,
+	struct bv_scene_obj *sp,
+	struct rt_db_internal *ip,
+	const mat_t mat)
 {
     struct rt_db_internal intern;
     struct bu_list vhead;
@@ -294,7 +295,7 @@ replot_modified_solid(
     rt_db_free_internal(&intern);
 
     /* Write new displaylist */
-    drawH_part2(sp->s_soldash, &vhead,
+    drawH_part2(s, sp->s_soldash, &vhead,
 		(struct db_full_path *)0,
 		(struct db_tree_state *)0, sp);
 
@@ -317,13 +318,13 @@ add_solid_path_to_result(
 }
 
 int
-redraw_visible_objects(void)
+redraw_visible_objects(struct mged_state *s)
 {
     int ret, ac = 1;
     char *av[] = {NULL, NULL};
 
     av[0] = "redraw";
-    ret = ged_exec(GEDP, ac, (const char **)av);
+    ret = ged_exec(s->GEDP, ac, (const char **)av);
 
     if (ret & BRLCAD_ERROR) {
 	return TCL_ERROR;

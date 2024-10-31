@@ -1149,7 +1149,7 @@ f_tracker(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[
 		dps[j] = copy_object(DBIP, &rt_uniresource, &state);
 
 		if (!no_draw || !is_dm_null()) {
-		    redraw_visible_objects();
+		    redraw_visible_objects(mged_s);
 		    size_reset(mged_s);
 		    new_mats();
 		    mged_color_soltab();

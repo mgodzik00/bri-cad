@@ -528,12 +528,12 @@ int cmd_killtree(
     const char *argv[]);
 
 /* dodraw.c */
-void cvt_vlblock_to_solids(struct bv_vlblock *vbp, const char *name, int copy);
+void cvt_vlblock_to_solids(struct mged_state *s, struct bv_vlblock *vbp, const char *name, int copy);
 int drawtrees(int argc, const char *argv[], int kind);
-int replot_modified_solid(struct bv_scene_obj *sp, struct rt_db_internal *ip, const mat_t mat);
-int replot_original_solid(struct bv_scene_obj *sp);
+int replot_modified_solid(struct mged_state *s, struct bv_scene_obj *sp, struct rt_db_internal *ip, const mat_t mat);
+int replot_original_solid(struct mged_state *s, struct bv_scene_obj *sp);
 void add_solid_path_to_result(Tcl_Interp *interpreter, struct bv_scene_obj *sp);
-int redraw_visible_objects(void);
+int redraw_visible_objects(struct mged_state *s);
 
 /* dozoom.c */
 void createDLists(struct bu_list *hdlp);

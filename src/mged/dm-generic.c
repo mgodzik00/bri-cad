@@ -71,7 +71,7 @@ common_dm(struct mged_state *s, int argc, const char *argv[])
 	     am_mode == AMM_CON_SCALE_Y ||
 	     am_mode == AMM_CON_SCALE_Z))
 	{
-	    if (redraw_visible_objects() == TCL_ERROR) {
+	    if (redraw_visible_objects(s) == TCL_ERROR) {
 		return TCL_ERROR;
 	    }
 	}
