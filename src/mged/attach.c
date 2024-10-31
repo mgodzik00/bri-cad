@@ -248,6 +248,7 @@ f_release(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     struct bu_vls vls = BU_VLS_INIT_ZERO;
 
@@ -267,12 +268,12 @@ f_release(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *
 	else
 	    bu_vls_strcpy(&vls, argv[1]);
 
-	status = release(ctp->s, bu_vls_addr(&vls), 1);
+	status = release(s, bu_vls_addr(&vls), 1);
 
 	bu_vls_free(&vls);
 	return status;
     } else
-	return release(ctp->s, (char *)NULL, 1);
+	return release(s, (char *)NULL, 1);
 }
 
 
@@ -298,6 +299,7 @@ f_attach(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *a
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     if (argc < 2) {
 	struct bu_vls vls = BU_VLS_INIT_ZERO;
@@ -321,7 +323,7 @@ f_attach(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *a
 	return TCL_ERROR;
     }
 
-    return mged_attach(ctp->s, argv[argc - 1], argc, argv);
+    return mged_attach(s, argv[argc - 1], argc, argv);
 }
 
 

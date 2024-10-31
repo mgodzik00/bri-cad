@@ -189,7 +189,7 @@ mged_pr_output(Tcl_Interp *interp)
 
 #define GED_OUTPUT do { \
     mged_pr_output(interpreter);\
-    Tcl_AppendResult(interpreter, bu_vls_addr(ctp->s->GEDP->ged_result_str), NULL); \
+    Tcl_AppendResult(interpreter, bu_vls_addr(s->GEDP->ged_result_str), NULL); \
 } while (0)
 
 
@@ -223,12 +223,12 @@ mged_db_search_callback(int argc, const char *argv[], void *userdata)
 
     Tcl_ResetResult((Tcl_Interp *)userdata);
 
-    /* NOTE: Tcl_Eval saves the last -exec result to ctp->s->GEDP->ged_result_str 
+    /* NOTE: Tcl_Eval saves the last -exec result to s->GEDP->ged_result_str 
        this causes a duplicate print of the last 'search -exec' in mged (since
        we're bu_logging here and then the ged_result_str is later flushed).
        To fix this, we need to clear the ged_result_str
     */
-    bu_vls_trunc(ctp->s->GEDP->ged_result_str, 0);
+    bu_vls_trunc(s->GEDP->ged_result_str, 0);
 
     return TCL_OK == ret;
 }
@@ -241,11 +241,12 @@ cmd_ged_edit_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
     const char *av[3];
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+    ret = (*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret & GED_HELP)
@@ -274,12 +275,13 @@ cmd_ged_simulate_wrapper(ClientData clientData, Tcl_Interp *interpreter, int arg
     const char *av[3];
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+    ret = (*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret & GED_HELP)
@@ -304,13 +306,14 @@ cmd_ged_info_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
     const char **av;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     struct ged_bv_data *bdata = NULL;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
     if (argc >= 2) {
-	(void)(*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+	(void)(*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
 	GED_OUTPUT;
     } else {
 	if ((argc == 1) && (STATE == ST_S_EDIT)) {
@@ -322,13 +325,13 @@ cmd_ged_info_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
 		if (bdata->s_fullpath.fp_len > 0) {
 		    av[1] = (const char *)LAST_SOLID(bdata)->d_namep;
 		    av[argc] = (const char *)NULL;
-		    (void)(*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)av);
+		    (void)(*ctp->ged_func)(s->GEDP, argc, (const char **)av);
 		    GED_OUTPUT;
 		}
 	    }
 	    bu_free((void *)av, "cmd_ged_info_wrapper: av");
 	} else {
-	    (void)(*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+	    (void)(*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
 	    GED_OUTPUT;
 	}
     }
@@ -343,11 +346,12 @@ cmd_ged_erase_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, 
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+    ret = (*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret)
@@ -369,15 +373,16 @@ cmd_ged_gqa(ClientData clientData, Tcl_Interp *interpreter, int argc, const char
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     size_t args;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    args = argc + 2 + ged_who_argc(ctp->s->GEDP);
-    ctp->s->GEDP->ged_gdp->gd_rt_cmd = (char **)bu_calloc(args, sizeof(char *), "alloc gd_rt_cmd");
+    args = argc + 2 + ged_who_argc(s->GEDP);
+    s->GEDP->ged_gdp->gd_rt_cmd = (char **)bu_calloc(args, sizeof(char *), "alloc gd_rt_cmd");
 
-    vp = &ctp->s->GEDP->ged_gdp->gd_rt_cmd[0];
+    vp = &s->GEDP->ged_gdp->gd_rt_cmd[0];
 
     /* Grab command name and any options */
     *vp++ = (char *)argv[0];
@@ -402,24 +407,24 @@ cmd_ged_gqa(ClientData clientData, Tcl_Interp *interpreter, int argc, const char
     if (i < argc) {
 	while (i < argc)
 	    *vp++ = (char *)argv[i++];
-	ctp->s->GEDP->ged_gdp->gd_rt_cmd_len = vp - ctp->s->GEDP->ged_gdp->gd_rt_cmd;
+	s->GEDP->ged_gdp->gd_rt_cmd_len = vp - s->GEDP->ged_gdp->gd_rt_cmd;
 	*vp = 0;
-	vp = &ctp->s->GEDP->ged_gdp->gd_rt_cmd[0];
+	vp = &s->GEDP->ged_gdp->gd_rt_cmd[0];
 	while (*vp)
-	    bu_vls_printf(ctp->s->GEDP->ged_result_str, "%s ", *vp++);
+	    bu_vls_printf(s->GEDP->ged_result_str, "%s ", *vp++);
 
-	bu_vls_printf(ctp->s->GEDP->ged_result_str, "\n");
+	bu_vls_printf(s->GEDP->ged_result_str, "\n");
     } else {
-	ctp->s->GEDP->ged_gdp->gd_rt_cmd_len = vp - ctp->s->GEDP->ged_gdp->gd_rt_cmd;
-	ctp->s->GEDP->ged_gdp->gd_rt_cmd_len += ged_who_argv(ctp->s->GEDP, vp,
-						       (const char **)&ctp->s->GEDP->ged_gdp->gd_rt_cmd[args]);
+	s->GEDP->ged_gdp->gd_rt_cmd_len = vp - s->GEDP->ged_gdp->gd_rt_cmd;
+	s->GEDP->ged_gdp->gd_rt_cmd_len += ged_who_argv(s->GEDP, vp,
+						       (const char **)&s->GEDP->ged_gdp->gd_rt_cmd[args]);
     }
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, ctp->s->GEDP->ged_gdp->gd_rt_cmd_len, (const char **)ctp->s->GEDP->ged_gdp->gd_rt_cmd);
+    ret = (*ctp->ged_func)(s->GEDP, s->GEDP->ged_gdp->gd_rt_cmd_len, (const char **)s->GEDP->ged_gdp->gd_rt_cmd);
     GED_OUTPUT;
 
-    bu_free(ctp->s->GEDP->ged_gdp->gd_rt_cmd, "free gd_rt_cmd");
-    ctp->s->GEDP->ged_gdp->gd_rt_cmd = NULL;
+    bu_free(s->GEDP->ged_gdp->gd_rt_cmd, "free gd_rt_cmd");
+    s->GEDP->ged_gdp->gd_rt_cmd = NULL;
 
     if (ret & GED_HELP)
 	return TCL_OK;
@@ -440,12 +445,13 @@ cmd_ged_in(ClientData clientData, Tcl_Interp *interpreter, int argc, const char 
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     const char *new_cmd[3];
     int c;
     int do_solid_edit = 0;
     int dont_draw = 0;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
     /* Parse options. */
@@ -487,10 +493,10 @@ cmd_ged_in(ClientData clientData, Tcl_Interp *interpreter, int argc, const char 
 	argc -= offset;
     }
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+    ret = (*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
     if (ret & GED_MORE) {
 	Tcl_AppendResult(interpreter, MORE_ARGS_STR, NULL);
-	Tcl_AppendResult(interpreter, bu_vls_addr(ctp->s->GEDP->ged_result_str), NULL);
+	Tcl_AppendResult(interpreter, bu_vls_addr(s->GEDP->ged_result_str), NULL);
     } else {
 	GED_OUTPUT;
     }
@@ -534,11 +540,12 @@ cmd_ged_inside(ClientData clientData, Tcl_Interp *interpreter, int argc, const c
     int arg;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     const char *new_cmd[3];
     struct rt_db_internal intern;
     struct ged_bv_data *bdata = NULL;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
     if (setjmp(jmp_env) == 0)
@@ -566,7 +573,7 @@ cmd_ged_inside(ClientData clientData, Tcl_Interp *interpreter, int argc, const c
 
 	arg = 1;
 	if (outdp) {
-	    ret = ged_inside_internal(ctp->s->GEDP, &intern, argc, argv, arg, outdp->d_namep);
+	    ret = ged_inside_internal(s->GEDP, &intern, argc, argv, arg, outdp->d_namep);
 	} else {
 	    ret = TCL_ERROR;
 	}
@@ -598,18 +605,18 @@ cmd_ged_inside(ClientData clientData, Tcl_Interp *interpreter, int argc, const c
 
 	arg = 1;
 	if (outdp) {
-	    ret = ged_inside_internal(ctp->s->GEDP, &intern, argc, argv, arg, outdp->d_namep);
+	    ret = ged_inside_internal(s->GEDP, &intern, argc, argv, arg, outdp->d_namep);
 	} else {
 	    ret = TCL_ERROR;
 	}
     } else {
 	arg = 2;
-	ret = ged_exec(ctp->s->GEDP, argc, (const char **)argv);
+	ret = ged_exec(s->GEDP, argc, (const char **)argv);
     }
 
     if (ret & GED_MORE) {
 	Tcl_AppendResult(interpreter, MORE_ARGS_STR, NULL);
-	Tcl_AppendResult(interpreter, bu_vls_addr(ctp->s->GEDP->ged_result_str), NULL);
+	Tcl_AppendResult(interpreter, bu_vls_addr(s->GEDP->ged_result_str), NULL);
     } else {
 	GED_OUTPUT;
     }
@@ -642,9 +649,10 @@ cmd_ged_more_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     const char *new_cmd[3];
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
     if (setjmp(jmp_env) == 0)
@@ -652,10 +660,10 @@ cmd_ged_more_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
     else
 	return TCL_OK;
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+    ret = (*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
     if (ret & GED_MORE) {
 	Tcl_AppendResult(interpreter, MORE_ARGS_STR, NULL);
-	Tcl_AppendResult(interpreter, bu_vls_addr(ctp->s->GEDP->ged_result_str), NULL);
+	Tcl_AppendResult(interpreter, bu_vls_addr(s->GEDP->ged_result_str), NULL);
     } else {
 	GED_OUTPUT;
     }
@@ -695,11 +703,12 @@ cmd_ged_plain_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, 
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+    ret = (*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
 
 /* This code is for debugging/testing the new ged return mechanism */
 #if 0
@@ -707,11 +716,11 @@ cmd_ged_plain_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, 
 	int r_loop = 0;
 	size_t result_cnt = 0;
 
-	result_cnt = ged_results_count(ctp->s->GEDP->ged_results);
+	result_cnt = ged_results_count(s->GEDP->ged_results);
 	if (result_cnt > 0) {
 	    bu_log("Results container holds results(%d):\n", result_cnt);
 	    for (r_loop = 0; r_loop < (int)result_cnt; r_loop++) {
-		bu_log("%s\n", ged_results_get(ctp->s->GEDP->ged_results, r_loop));
+		bu_log("%s\n", ged_results_get(s->GEDP->ged_results, r_loop));
 	    }
 	}
     }
@@ -719,7 +728,7 @@ cmd_ged_plain_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, 
 
     if (ret & GED_MORE) {
 	Tcl_AppendResult(interpreter, MORE_ARGS_STR, NULL);
-	Tcl_AppendResult(interpreter, bu_vls_addr(ctp->s->GEDP->ged_result_str), NULL);
+	Tcl_AppendResult(interpreter, bu_vls_addr(s->GEDP->ged_result_str), NULL);
     } else {
 	GED_OUTPUT;
     }
@@ -731,17 +740,17 @@ cmd_ged_plain_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, 
 	const char *who_cmd[2] = {"who", NULL};
 
 	/* Stash previous result string state so who cmd doesn't replace it */
-	bu_vls_sprintf(&rcache, "%s", bu_vls_addr(ctp->s->GEDP->ged_result_str));
+	bu_vls_sprintf(&rcache, "%s", bu_vls_addr(s->GEDP->ged_result_str));
 
-	who_ret = ged_exec(ctp->s->GEDP, 1, who_cmd);
+	who_ret = ged_exec(s->GEDP, 1, who_cmd);
 	if (who_ret == BRLCAD_OK) {
 	    /* worst possible is a bunch of 1-char names, allocate and
 	     * split into an argv accordingly.
 	     */
 
 	    int i, j;
-	    char *str = bu_strdup(bu_vls_addr(ctp->s->GEDP->ged_result_str));
-	    size_t who_argc = (bu_vls_strlen(ctp->s->GEDP->ged_result_str) / 2) + 1;
+	    char *str = bu_strdup(bu_vls_addr(s->GEDP->ged_result_str));
+	    size_t who_argc = (bu_vls_strlen(s->GEDP->ged_result_str) / 2) + 1;
 	    char **who_argv = (char **)bu_calloc(who_argc+1, sizeof(char *), "who_argv");
 
 	    who_ret = bu_argv_from_string(who_argv, who_argc, str);
@@ -765,7 +774,7 @@ cmd_ged_plain_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, 
 	}
 
 	/* Restore ged result str */
-	bu_vls_sprintf(ctp->s->GEDP->ged_result_str, "%s", bu_vls_addr(&rcache));
+	bu_vls_sprintf(s->GEDP->ged_result_str, "%s", bu_vls_addr(&rcache));
 	bu_vls_free(&rcache);
     }
 
@@ -782,14 +791,15 @@ cmd_ged_view_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, c
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    if (!ctp->s->GEDP->ged_gvp)
-	ctp->s->GEDP->ged_gvp = view_state->vs_gvp;
+    if (!s->GEDP->ged_gvp)
+	s->GEDP->ged_gvp = view_state->vs_gvp;
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+    ret = (*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret & GED_HELP)
@@ -811,8 +821,9 @@ cmd_ged_dm_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, con
     int ret;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
     if (setjmp(jmp_env) == 0)
@@ -820,11 +831,11 @@ cmd_ged_dm_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, con
     else
 	return TCL_OK;
 
-    if (!ctp->s->GEDP->ged_gvp)
-	ctp->s->GEDP->ged_gvp = view_state->vs_gvp;
-    ctp->s->GEDP->ged_gvp->dmp = (void *)mged_curr_dm->dm_dmp;
+    if (!s->GEDP->ged_gvp)
+	s->GEDP->ged_gvp = view_state->vs_gvp;
+    s->GEDP->ged_gvp->dmp = (void *)mged_curr_dm->dm_dmp;
 
-    ret = (*ctp->ged_func)(ctp->s->GEDP, argc, (const char **)argv);
+    ret = (*ctp->ged_func)(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     (void)signal(SIGINT, SIG_IGN);
@@ -933,6 +944,7 @@ cmd_cmd_win(ClientData clientData, Tcl_Interp *interpreter, int argc, const char
     struct bu_vls vls = BU_VLS_INIT_ZERO;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     if (argc < 2) {
 	bu_vls_printf(&vls, "helpdevel cmd_win");
@@ -1045,10 +1057,10 @@ cmd_cmd_win(ClientData clientData, Tcl_Interp *interpreter, int argc, const char
 	}
 
 	if (curr_cmd_list->cl_tie) {
-	    set_curr_dm(ctp->s, curr_cmd_list->cl_tie);
+	    set_curr_dm(s, curr_cmd_list->cl_tie);
 
-	    if (ctp->s->GEDP != GED_NULL)
-		ctp->s->GEDP->ged_gvp = view_state->vs_gvp;
+	    if (s->GEDP != GED_NULL)
+		s->GEDP->ged_gvp = view_state->vs_gvp;
 	}
 
 	bu_vls_trunc(&curr_cmd_list->cl_more_default, 0);
@@ -1574,6 +1586,7 @@ f_postscript(ClientData clientData, Tcl_Interp *interpreter, int argc, const cha
     struct _view_state *vsp;
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     if (argc < 2) {
 	struct bu_vls vls = BU_VLS_INIT_ZERO;
 
@@ -1583,12 +1596,12 @@ f_postscript(ClientData clientData, Tcl_Interp *interpreter, int argc, const cha
 	return TCL_ERROR;
     }
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
     dml = mged_curr_dm;
-    ctp->s->GEDP->ged_gvp = view_state->vs_gvp;
-    status = mged_attach(ctp->s, "postscript", argc, argv);
+    s->GEDP->ged_gvp = view_state->vs_gvp;
+    status = mged_attach(s, "postscript", argc, argv);
     if (status == TCL_ERROR)
 	return TCL_ERROR;
 
@@ -1610,8 +1623,8 @@ f_postscript(ClientData clientData, Tcl_Interp *interpreter, int argc, const cha
     av[0] = "release";
     av[1] = NULL;
     status = f_release(clientData, interpreter, 1, av);
-    set_curr_dm(ctp->s, dml);
-    ctp->s->GEDP->ged_gvp = view_state->vs_gvp;
+    set_curr_dm(s, dml);
+    s->GEDP->ged_gvp = view_state->vs_gvp;
 
     return status;
 }
@@ -1622,6 +1635,7 @@ f_winset(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *a
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     if (argc < 1 || 2 < argc) {
 	struct bu_vls vls = BU_VLS_INIT_ZERO;
@@ -1646,15 +1660,15 @@ f_winset(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *a
 	struct mged_dm *p = (struct mged_dm *)BU_PTBL_GET(&active_dm_set, di);
 	struct bu_vls *pn = dm_get_pathname(p->dm_dmp);
 	if (pn && BU_STR_EQUAL(argv[1], bu_vls_cstr(pn))) {
-	    set_curr_dm(ctp->s, p);
+	    set_curr_dm(s, p);
 
 	    if (mged_curr_dm->dm_tie)
 		curr_cmd_list = mged_curr_dm->dm_tie;
 	    else
 		curr_cmd_list = &head_cmd_list;
 
-	    if (ctp->s->GEDP != GED_NULL)
-		ctp->s->GEDP->ged_gvp = view_state->vs_gvp;
+	    if (s->GEDP != GED_NULL)
+		s->GEDP->ged_gvp = view_state->vs_gvp;
 
 	    return TCL_OK;
 	}
@@ -1845,14 +1859,15 @@ cmd_nmg_collapse(ClientData clientData, Tcl_Interp *interpreter, int argc, const
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     const char *av[3];
     int ret;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    ret = ged_exec(ctp->s->GEDP, argc, (const char **)argv);
+    ret = ged_exec(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret)
@@ -1876,11 +1891,12 @@ cmd_units(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     int ret;
     fastf_t sf;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
     if (DBIP == DBI_NULL) {
@@ -1889,7 +1905,7 @@ cmd_units(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *
     }
 
     sf = DBIP->dbi_base2local;
-    ret = ged_exec(ctp->s->GEDP, argc, (const char **)argv);
+    ret = ged_exec(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret)
@@ -1914,13 +1930,14 @@ cmd_search(ClientData clientData, Tcl_Interp *interpreter, int argc, const char 
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     int ret;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    ret = ged_exec(ctp->s->GEDP, argc, (const char **)argv);
+    ret = ged_exec(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret)
@@ -1943,13 +1960,14 @@ cmd_tol(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *ar
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     int ret;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    ret = ged_exec(ctp->s->GEDP, argc, (const char **)argv);
+    ret = ged_exec(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret)
@@ -1978,13 +1996,14 @@ cmd_blast(ClientData clientData, Tcl_Interp *UNUSED(interpreter), int argc, cons
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     int ret;
 
-    if (ctp->s->GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
-    ret = ged_exec(ctp->s->GEDP, argc, argv);
+    ret = ged_exec(s->GEDP, argc, argv);
     if (ret)
 	return TCL_ERROR;
 
@@ -1997,7 +2016,7 @@ cmd_blast(ClientData clientData, Tcl_Interp *UNUSED(interpreter), int argc, cons
 	struct mged_dm *m_dmp = (struct mged_dm *)BU_PTBL_GET(&active_dm_set, di);
 	int non_empty = 0; /* start out empty */
 
-	set_curr_dm(ctp->s, m_dmp);
+	set_curr_dm(s, m_dmp);
 
 	if (mged_curr_dm->dm_tie) {
 	    curr_cmd_list = mged_curr_dm->dm_tie;
@@ -2005,11 +2024,11 @@ cmd_blast(ClientData clientData, Tcl_Interp *UNUSED(interpreter), int argc, cons
 	    curr_cmd_list = &head_cmd_list;
 	}
 
-	ctp->s->GEDP->ged_gvp = view_state->vs_gvp;
+	s->GEDP->ged_gvp = view_state->vs_gvp;
 
-	gdlp = BU_LIST_NEXT(display_list, ctp->s->GEDP->ged_gdp->gd_headDisplay);
+	gdlp = BU_LIST_NEXT(display_list, s->GEDP->ged_gdp->gd_headDisplay);
 
-	while (BU_LIST_NOT_HEAD(gdlp, ctp->s->GEDP->ged_gdp->gd_headDisplay)) {
+	while (BU_LIST_NOT_HEAD(gdlp, s->GEDP->ged_gdp->gd_headDisplay)) {
 	    next_gdlp = BU_LIST_PNEXT(display_list, gdlp);
 
 	    if (BU_LIST_NON_EMPTY(&gdlp->dl_head_scene_obj)) {
@@ -2026,7 +2045,7 @@ cmd_blast(ClientData clientData, Tcl_Interp *UNUSED(interpreter), int argc, cons
 
 	    av[0] = "autoview";
 	    av[1] = (char *)0;
-	    ged_exec(ctp->s->GEDP, 1, (const char **)av);
+	    ged_exec(s->GEDP, 1, (const char **)av);
 
 	    (void)mged_svbase();
 
@@ -2036,9 +2055,9 @@ cmd_blast(ClientData clientData, Tcl_Interp *UNUSED(interpreter), int argc, cons
 	}
     }
 
-    set_curr_dm(ctp->s, save_m_dmp);
+    set_curr_dm(s, save_m_dmp);
     curr_cmd_list = save_cmd_list;
-    ctp->s->GEDP->ged_gvp = view_state->vs_gvp;
+    s->GEDP->ged_gvp = view_state->vs_gvp;
 
     return TCL_OK;
 }
@@ -2052,11 +2071,12 @@ cmd_draw(ClientData clientData, Tcl_Interp *UNUSED(interpreter), int argc, const
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     struct bview *gvp = NULL;
 
-    if (ctp->s->GEDP)
-	gvp = ctp->s->GEDP->ged_gvp;
+    if (s->GEDP)
+	gvp = s->GEDP->ged_gvp;
 
     if (gvp && DMP) {
 	gvp->gv_width = dm_get_width(DMP);
@@ -2102,6 +2122,7 @@ cmd_shaded_mode(ClientData clientData,
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     int ret;
 
@@ -2122,7 +2143,7 @@ cmd_shaded_mode(ClientData clientData,
 	++argv;
     }
 
-    ret = ged_exec(ctp->s->GEDP, argc, (const char **)argv);
+    ret = ged_exec(s->GEDP, argc, (const char **)argv);
     GED_OUTPUT;
 
     if (ret)
@@ -2153,17 +2174,18 @@ cmd_ps(ClientData clientData,
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     int ret = 0;
     const char *av[3];
     av[0] = "process";
     av[1] = "list";
     av[2] = NULL;
-    ret = ged_exec(ctp->s->GEDP, 2, (const char **)av);
+    ret = ged_exec(s->GEDP, 2, (const char **)av);
     /* For the next couple releases, print a rename notice */
     mged_pr_output(interpreter);
     Tcl_AppendResult(interpreter, "(Note: former 'ps' command has been renamed to 'postscript')\n", NULL);
-    Tcl_AppendResult(interpreter, bu_vls_addr(ctp->s->GEDP->ged_result_str), NULL);
+    Tcl_AppendResult(interpreter, bu_vls_addr(s->GEDP->ged_result_str), NULL);
     return (ret) ? TCL_ERROR : TCL_OK;
 }
 

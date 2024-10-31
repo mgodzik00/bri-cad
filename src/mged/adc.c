@@ -442,6 +442,7 @@ f_adc (
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     struct bu_vls vls = BU_VLS_INIT_ZERO;
     const char *parameter;
@@ -472,7 +473,7 @@ f_adc (
 	    adc_auto = 0;
 	}
 
-	adc_set_scroll(ctp->s);
+	adc_set_scroll(s);
 
 	return TCL_OK;
     }
@@ -515,7 +516,7 @@ f_adc (
 	    else
 		adc_state->adc_draw = 0;
 
-	    adc_set_scroll(ctp->s);
+	    adc_set_scroll(s);
 
 	    return TCL_OK;
 	}

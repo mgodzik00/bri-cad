@@ -379,8 +379,9 @@ bv_top(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     /* Top view */
-    setview(ctp->s, 0.0, 0.0, 0.0);
+    setview(s, 0.0, 0.0, 0.0);
     return TCL_OK;
 }
 
@@ -390,8 +391,9 @@ bv_bottom(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     /* Bottom view */
-    setview(ctp->s, 180.0, 0.0, 0.0);
+    setview(s, 180.0, 0.0, 0.0);
     return TCL_OK;
 }
 
@@ -401,8 +403,9 @@ bv_right(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), ch
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     /* Right view */
-    setview(ctp->s, 270.0, 0.0, 0.0);
+    setview(s, 270.0, 0.0, 0.0);
     return TCL_OK;
 }
 
@@ -412,8 +415,9 @@ bv_left(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), cha
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     /* Left view */
-    setview(ctp->s, 270.0, 0.0, 180.0);
+    setview(s, 270.0, 0.0, 180.0);
     return TCL_OK;
 }
 
@@ -423,8 +427,9 @@ bv_front(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), ch
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     /* Front view */
-    setview(ctp->s, 270.0, 0.0, 270.0);
+    setview(s, 270.0, 0.0, 270.0);
     return TCL_OK;
 }
 
@@ -434,8 +439,9 @@ bv_rear(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), cha
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     /* Rear view */
-    setview(ctp->s, 270.0, 0.0, 90.0);
+    setview(s, 270.0, 0.0, 90.0);
     return TCL_OK;
 }
 
@@ -495,9 +501,10 @@ int
 bv_reset(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     /* Reset view such that all solids can be seen */
-    size_reset(ctp->s);
-    setview(ctp->s, 0.0, 0.0, 0.0);
+    size_reset(s);
+    setview(s, 0.0, 0.0, 0.0);
     (void)mged_svbase();
     return TCL_OK;
 }
@@ -507,7 +514,8 @@ int
 bv_45_45(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
-    setview(ctp->s, 270.0+45.0, 0.0, 270.0-45.0);
+    struct mged_state *s = ctp->s;
+    setview(s, 270.0+45.0, 0.0, 270.0-45.0);
     return TCL_OK;
 }
 
@@ -516,8 +524,9 @@ int
 bv_35_25(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[])) {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     /* Use Azimuth=35, Elevation=25 in GIFT's backwards space */
-    setview(ctp->s, 270.0+25.0, 0.0, 270.0-35.0);
+    setview(s, 270.0+25.0, 0.0, 270.0-35.0);
     return TCL_OK;
 }
 
@@ -564,12 +573,13 @@ be_o_illuminate(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(ar
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     if (not_state(ST_VIEW, "Matrix Illuminate"))
 	return TCL_ERROR;
 
-    if (ill_common(ctp->s)) {
-	(void)chg_state(ctp->s, ST_VIEW, ST_O_PICK, "Matrix Illuminate");
+    if (ill_common(s)) {
+	(void)chg_state(s, ST_VIEW, ST_O_PICK, "Matrix Illuminate");
     }
     /* reset accumulation local scale factors */
     acc_sc[0] = acc_sc[1] = acc_sc[2] = 1.0;
@@ -585,12 +595,13 @@ be_s_illuminate(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(ar
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
-   if (not_state(ST_VIEW, "Primitive Illuminate"))
+    if (not_state(ST_VIEW, "Primitive Illuminate"))
 	return TCL_ERROR;
 
-    if (ill_common(ctp->s)) {
-	(void)chg_state(ctp->s, ST_VIEW, ST_S_PICK, "Primitive Illuminate");
+    if (ill_common(s)) {
+	(void)chg_state(s, ST_VIEW, ST_S_PICK, "Primitive Illuminate");
     }
     return TCL_OK;
 }
@@ -737,6 +748,7 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     if (STATE == ST_S_EDIT) {
 	/* Accept a solid edit */
@@ -747,12 +759,12 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 	mmenu_set_all(MENU_L1, MENU_NULL);
 	mmenu_set_all(MENU_L2, MENU_NULL);
 
-	dl_set_iflag(ctp->s->GEDP->ged_gdp->gd_headDisplay, DOWN);
+	dl_set_iflag(s->GEDP->ged_gdp->gd_headDisplay, DOWN);
 
 	illum_gdlp = GED_DISPLAY_LIST_NULL;
 	illump = NULL;
 	mged_color_soltab();
-	(void)chg_state(ctp->s, ST_S_EDIT, ST_VIEW, "Edit Accept");
+	(void)chg_state(s, ST_S_EDIT, ST_VIEW, "Edit Accept");
     }  else if (STATE == ST_O_EDIT) {
 	/* Accept an object edit */
 	edobj = 0;
@@ -765,7 +777,7 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 	illum_gdlp = GED_DISPLAY_LIST_NULL;
 	illump = NULL;
 	mged_color_soltab();
-	(void)chg_state(ctp->s, ST_O_EDIT, ST_VIEW, "Edit Accept");
+	(void)chg_state(s, ST_O_EDIT, ST_VIEW, "Edit Accept");
     } else {
 	if (not_state(ST_S_EDIT, "Edit Accept"))
 	    return TCL_ERROR;
@@ -794,6 +806,7 @@ be_reject(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     update_views = 1;
     dm_set_dirty(DMP, 1);
@@ -835,10 +848,10 @@ be_reject(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
     illump = NULL;		/* None selected */
 
     /* Clear illumination flags */
-    dl_set_iflag(ctp->s->GEDP->ged_gdp->gd_headDisplay, DOWN);
+    dl_set_iflag(s->GEDP->ged_gdp->gd_headDisplay, DOWN);
 
     mged_color_soltab();
-    (void)chg_state(ctp->s, STATE, ST_VIEW, "Edit Reject");
+    (void)chg_state(s, STATE, ST_VIEW, "Edit Reject");
 
     for (size_t i = 0; i < BU_PTBL_LEN(&active_dm_set); i++) {
 	struct mged_dm *m_dmp = (struct mged_dm *)BU_PTBL_GET(&active_dm_set, i);

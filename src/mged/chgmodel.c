@@ -71,6 +71,7 @@ f_make(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
     struct cmdtab *ctp = (struct cmdtab *)clientData;
     MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     Tcl_DString ds;
     int ret;
 
@@ -97,12 +98,12 @@ f_make(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 	av[6] = argv[2];
 	av[7] = (char *)0;
 
-	ret = ged_exec(ctp->s->GEDP, 7, (const char **)av);
+	ret = ged_exec(s->GEDP, 7, (const char **)av);
     } else
-	ret = ged_exec(ctp->s->GEDP, argc, (const char **)argv);
+	ret = ged_exec(s->GEDP, argc, (const char **)argv);
 
     Tcl_DStringInit(&ds);
-    Tcl_DStringAppend(&ds, bu_vls_addr(ctp->s->GEDP->ged_result_str), -1);
+    Tcl_DStringAppend(&ds, bu_vls_addr(s->GEDP->ged_result_str), -1);
     Tcl_DStringResult(interp, &ds);
 
     if (ret == BRLCAD_OK) {
