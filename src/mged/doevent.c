@@ -115,6 +115,9 @@ static int button0 = 0;
 int
 doEvent(ClientData clientData, XEvent *eventPtr)
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
     struct mged_dm *save_dm_list;
     int status;
 
@@ -126,7 +129,7 @@ doEvent(ClientData clientData, XEvent *eventPtr)
 
     /* it's an event for a window that I'm not handling */
     if (mged_curr_dm == MGED_DM_NULL) {
-	set_curr_dm(save_dm_list);
+	set_curr_dm(s, save_dm_list);
 	return TCL_OK;
     }
 
@@ -136,7 +139,7 @@ doEvent(ClientData clientData, XEvent *eventPtr)
 
     /* no further processing of this event */
     if (status != TCL_OK) {
-	set_curr_dm(save_dm_list);
+	set_curr_dm(s, save_dm_list);
 	return status;
     }
 
@@ -199,7 +202,7 @@ doEvent(ClientData clientData, XEvent *eventPtr)
     }
 #endif
 
-    set_curr_dm(save_dm_list);
+    set_curr_dm(s, save_dm_list);
     return status;
 }
 #else

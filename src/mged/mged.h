@@ -213,7 +213,7 @@ extern Tcl_Interp *ged_interp;
 extern void mged_setup(Tcl_Interp **interpreter);
 extern void mged_global_variable_teardown(Tcl_Interp *interpreter); /* cmd.c */
 extern void buildHrot(mat_t, double, double, double);
-extern void dozoom(int which_eye);
+extern void dozoom(struct mged_state *s, int which_eye);
 #ifndef _WIN32
 extern void itoa(int n, char *s, int w);
 #endif
@@ -537,8 +537,8 @@ int redraw_visible_objects(struct mged_state *s);
 
 /* dozoom.c */
 void createDLists(struct bu_list *hdlp);
-void createDListSolid(struct bv_scene_obj *sp);
-void createDListAll(struct display_list *gdlp);
+void createDListSolid(struct mged_state *s, struct bv_scene_obj *sp);
+void createDListAll(struct mged_state *s, struct display_list *gdlp);
 void freeDListsAll(unsigned int dlist, int range);
 
 /* edarb.c */
