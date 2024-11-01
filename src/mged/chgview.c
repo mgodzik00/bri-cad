@@ -54,9 +54,9 @@ void mged_center(struct mged_state *s, point_t center);
 static void abs_zoom(struct mged_state *s);
 void usejoy(double xangle, double yangle, double zangle);
 
-int knob_rot(vect_t rvec, char origin, int mf, int vf, int ef);
-int knob_tran(vect_t tvec, int model_flag, int view_flag, int edit_flag);
-int mged_etran(char coords, vect_t tvec);
+int knob_rot(struct mged_state *s, vect_t rvec, char origin, int mf, int vf, int ef);
+int knob_tran(struct mged_state *s, vect_t tvec, int model_flag, int view_flag, int edit_flag);
+int mged_etran(struct mged_state *s, char coords, vect_t tvec);
 int mged_mtran(const vect_t tvec);
 int mged_otran(const vect_t tvec);
 int mged_vtran(const vect_t tvec);
@@ -984,7 +984,7 @@ f_ill(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 	    (void)chg_state(s, ST_O_PICK, ST_O_PATH, "Keyboard illuminate");
 	} else {
 	    /* Check details, Init menu, set state=ST_S_EDIT */
-	    init_sedit();
+	    init_sedit(s);
 	}
     }
 
@@ -2283,7 +2283,7 @@ f_knob(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 				edit_absolute_scale += f;
 
 				if (STATE == ST_S_EDIT) {
-				    sedit_abs_scale();
+				    sedit_abs_scale(s);
 				} else {
 				    oedit_abs_scale();
 				}
@@ -2296,7 +2296,7 @@ f_knob(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 				edit_absolute_scale = f;
 
 				if (STATE == ST_S_EDIT) {
-				    sedit_abs_scale();
+				    sedit_abs_scale(s);
 				} else {
 				    oedit_abs_scale();
 				}
@@ -2427,11 +2427,11 @@ usage:
     }
 
     if (do_tran) {
-	(void)knob_tran(tvec, model_flag, view_flag, edit_flag);
+	(void)knob_tran(s, tvec, model_flag, view_flag, edit_flag);
     }
 
     if (do_rot) {
-	(void)knob_rot(rvec, origin, model_flag, view_flag, edit_flag);
+	(void)knob_rot(s, rvec, origin, model_flag, view_flag, edit_flag);
     }
 
     check_nonzero_rates();
@@ -2440,14 +2440,15 @@ usage:
 
 
 int
-knob_tran(vect_t tvec,
-	  int model_flag,
-	  int view_flag,
-	  int edit_flag)
+knob_tran(struct mged_state *s,
+	vect_t tvec,
+	int model_flag,
+	int view_flag,
+	int edit_flag)
 {
     if (EDIT_TRAN && ((mged_variables->mv_transform == 'e' &&
 		       !view_flag && !model_flag) || edit_flag)) {
-	mged_etran(mged_variables->mv_coords, tvec);
+	mged_etran(s, mged_variables->mv_coords, tvec);
     } else if (model_flag || (mged_variables->mv_coords == 'm' && !view_flag)) {
 	mged_mtran(tvec);
     } else if (mged_variables->mv_coords == 'o') {
@@ -2461,15 +2462,16 @@ knob_tran(vect_t tvec,
 
 
 int
-knob_rot(vect_t rvec,
-	 char origin,
-	 int model_flag,
-	 int view_flag,
-	 int edit_flag)
+knob_rot(struct mged_state *s,
+	vect_t rvec,
+	char origin,
+	int model_flag,
+	int view_flag,
+	int edit_flag)
 {
     if (EDIT_ROTATE && ((mged_variables->mv_transform == 'e' &&
 			 !view_flag && !model_flag) || edit_flag)) {
-	mged_erot_xyz(origin, rvec);
+	mged_erot_xyz(s, origin, rvec);
     } else if (model_flag || (mged_variables->mv_coords == 'm' && !view_flag)) {
 	mged_vrot_xyz(origin, 'm', rvec);
     } else if (mged_variables->mv_coords == 'o') {
@@ -3288,7 +3290,8 @@ f_view_ring(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const c
 
 
 int
-mged_erot(char coords,
+mged_erot(struct mged_state *s,
+	char coords,
 	  char rotate_about,
 	  mat_t newrot)
 {
@@ -3332,7 +3335,7 @@ mged_erot(char coords,
 	inpara = 0;
 	MAT_COPY(incr_change, newrot);
 	bn_mat_mul2(incr_change, acc_rot_sol);
-	sedit();
+	sedit(s);
 
 	mged_variables->mv_rotate_about = save_rotate_about;
 	es_edflag = save_edflag;
@@ -3373,15 +3376,16 @@ mged_erot(char coords,
 
 
 int
-mged_erot_xyz(char rotate_about,
-	      vect_t rvec)
+mged_erot_xyz(struct mged_state *s,
+	char rotate_about,
+	vect_t rvec)
 {
     mat_t newrot;
 
     MAT_IDN(newrot);
     bn_mat_angles(newrot, rvec[X], rvec[Y], rvec[Z]);
 
-    return mged_erot(mged_variables->mv_coords, rotate_about, newrot);
+    return mged_erot(s, mged_variables->mv_coords, rotate_about, newrot);
 }
 
 
@@ -3421,7 +3425,7 @@ cmd_mrot(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]
 	    return TCL_ERROR;
 	}
 
-	return mged_erot(view_state->vs_gvp->gv_coord, view_state->vs_gvp->gv_rotate_about, rmat);
+	return mged_erot(s, view_state->vs_gvp->gv_coord, view_state->vs_gvp->gv_rotate_about, rmat);
     } else {
 	int ret;
 
@@ -3588,7 +3592,7 @@ cmd_rot(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 	    return TCL_ERROR;
 	}
 
-	return mged_erot(coord, view_state->vs_gvp->gv_rotate_about, rmat);
+	return mged_erot(s, coord, view_state->vs_gvp->gv_rotate_about, rmat);
     } else {
 	int ret;
 
@@ -3634,7 +3638,7 @@ cmd_arot(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]
 	    return TCL_ERROR;
 	}
 
-	return mged_erot(view_state->vs_gvp->gv_coord, view_state->vs_gvp->gv_rotate_about, rmat);
+	return mged_erot(s, view_state->vs_gvp->gv_coord, view_state->vs_gvp->gv_rotate_about, rmat);
     } else {
 	int ret;
 
@@ -3656,8 +3660,9 @@ cmd_arot(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]
 
 
 int
-mged_etran(char coords,
-	   vect_t tvec)
+mged_etran(struct mged_state *s,
+	char coords,
+	vect_t tvec)
 {
     point_t p2;
     int save_edflag;
@@ -3697,7 +3702,7 @@ mged_etran(char coords,
 
 	VADD2(es_para, delta, curr_e_axes_pos);
 	inpara = 3;
-	sedit();
+	sedit(s);
 	es_edflag = save_edflag;
     } else {
 	MAT_IDN(xlatemat);
@@ -3795,7 +3800,7 @@ cmd_tra(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 	    return TCL_ERROR;
 	}
 
-	return mged_etran(coord, tvec);
+	return mged_etran(s, coord, tvec);
     } else {
 	int ret;
 
@@ -3817,7 +3822,7 @@ cmd_tra(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 
 
 int
-mged_escale(fastf_t sfactor)
+mged_escale(struct mged_state *s, fastf_t sfactor)
 {
     fastf_t old_scale;
 
@@ -3850,7 +3855,7 @@ mged_escale(fastf_t sfactor)
 	    edit_absolute_scale = acc_sc_sol - 1.0;
 	}
 
-	sedit();
+	sedit(s);
 
 	es_edflag = save_edflag;
     } else {
@@ -3984,7 +3989,7 @@ cmd_sca(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 		return TCL_OK;
 	    }
 
-	    return mged_escale(sf1);
+	    return mged_escale(s, sf1);
 	} else {
 	    if (sf1 <= SMALL_FASTF || INFINITY < sf1) {
 		return TCL_OK;
@@ -4002,12 +4007,12 @@ cmd_sca(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 		save_edobj = edobj;
 		edobj = BE_O_XSCALE;
 
-		if ((ret = mged_escale(sf1)) == TCL_OK) {
+		if ((ret = mged_escale(s, sf1)) == TCL_OK) {
 		    edobj = BE_O_YSCALE;
 
-		    if ((ret = mged_escale(sf2)) == TCL_OK) {
+		    if ((ret = mged_escale(s, sf2)) == TCL_OK) {
 			edobj = BE_O_ZSCALE;
-			ret = mged_escale(sf3);
+			ret = mged_escale(s, sf3);
 		    }
 		}
 

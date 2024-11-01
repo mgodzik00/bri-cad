@@ -74,9 +74,6 @@
 #include "ged.h"
 #include "wdb.h"
 
-/* Needed to define struct menu_item */
-#include "./menu.h"
-
 /* Needed to define struct bv_scene_obj */
 #include "bv/defines.h"
 
@@ -108,6 +105,8 @@ struct cmdtab {
 };
 
 #include "./mged_dm.h" /* _view_state */
+/* Needed to define struct menu_item */
+#include "./menu.h"
 
 /* global state */
 extern struct db_i *DBIP;   /* defined in mged.c */
@@ -226,7 +225,7 @@ extern void moveHinstance(struct directory *cdp, struct directory *dp, matp_t xl
 extern void moveHobj(struct directory *dp, matp_t xlate);
 extern void quit(void);
 extern void refresh(void);
-extern void sedit(void);
+extern void sedit(struct mged_state *s);
 extern void setview(struct mged_state *s, double a1, double a2, double a3);
 extern void adcursor(void);
 extern void mmenu_display(int y_top);
@@ -471,7 +470,7 @@ int gui_setup(const char *dstr);
 
 
 /* buttons.c */
-void btn_head_menu(int i, int menu, int item);
+void btn_head_menu(struct mged_state *s, int i, int menu, int item);
 void chg_l2menu(int i);
 
 /* chgmodel.c */
@@ -484,7 +483,7 @@ int extract_mater_from_line(
     int *inherit);
 
 /* chgview.c */
-int mged_erot_xyz(char origin, vect_t rvec);
+int mged_erot_xyz(struct mged_state *s, char origin, vect_t rvec);
 int mged_svbase(void);
 int mged_vrot_xyz(char origin, char coords, vect_t rvec);
 void size_reset(struct mged_state *s);
@@ -630,20 +629,20 @@ void transform_editing_solid(
     const mat_t mat,
     struct rt_db_internal *is,		/* input solid */
     int freedbi);
-void replot_editing_solid(void);
-void sedit_abs_scale(void);
-void sedit_accept(void);
-void sedit_mouse(const vect_t mousevec);
-void sedit_reject(void);
-void sedit_vpick(point_t v_pos);
+void replot_editing_solid(struct mged_state *s);
+void sedit_abs_scale(struct mged_state *s);
+void sedit_accept(struct mged_state *s);
+void sedit_mouse(struct mged_state *s, const vect_t mousevec);
+void sedit_reject(struct mged_state *s);
+void sedit_vpick(struct mged_state *s, point_t v_pos);
 void oedit_abs_scale(void);
-void oedit_accept(void);
+void oedit_accept(struct mged_state *s);
 void oedit_reject(void);
 void objedit_mouse(const vect_t mousevec);
 extern int nurb_closest2d(int *surface, int *uval, int *vval, const struct rt_nurb_internal *spl, const point_t ref_pt, const mat_t mat);
 void label_edited_solid(int *num_lines, point_t *lines, struct rt_point_labels pl[], int max_pl, const mat_t xform, struct rt_db_internal *ip);
 void init_oedit(void);
-void init_sedit(void);
+void init_sedit(struct mged_state *s);
 
 /* share.c */
 void usurp_all_resources(struct mged_dm *dlp1, struct mged_dm *dlp2);

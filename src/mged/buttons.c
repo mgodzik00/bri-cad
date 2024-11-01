@@ -149,11 +149,11 @@ static fastf_t sav_vscale;
 static int vsaved = 0;	/* set if view saved */
 
 extern void mged_color_soltab(void);
-extern void sl_halt_scroll(int, int, int);	/* in scroll.c */
-extern void sl_toggle_scroll(int, int, int);
+extern void sl_halt_scroll(struct mged_state *s, int, int, int);	/* in scroll.c */
+extern void sl_toggle_scroll(struct mged_state *s, int, int, int);
 
-void btn_head_menu(int i, int menu, int item);
-void btn_item_hit(int arg, int menu, int item);
+void btn_head_menu(struct mged_state *s, int i, int menu, int item);
+void btn_item_hit(struct mged_state *s, int arg, int menu, int item);
 
 static struct menu_item first_menu[] = {
     { "BUTTON MENU", btn_head_menu, 1 },		/* chg to 2nd menu */
@@ -240,6 +240,10 @@ f_press(ClientData clientData,
 	int argc,
 	char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     int i;
     struct bu_vls vls = BU_VLS_INIT_ZERO;
 
@@ -297,7 +301,7 @@ f_press(ClientData clientData,
 		/* It's up to the menu_func to set menu_state->ms_flag = 0
 		 * if no arrow is desired */
 		if (mptr->menu_func != NULL)
-		    (*(mptr->menu_func))(mptr->menu_arg, menu, item);
+		    (*(mptr->menu_func))(s, mptr->menu_arg, menu, item);
 
 		goto next;
 	    }
@@ -754,7 +758,7 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 	/* Accept a solid edit */
 	edsol = 0;
 
-	sedit_accept();		/* zeros "edsol" var */
+	sedit_accept(s);		/* zeros "edsol" var */
 
 	mmenu_set_all(MENU_L1, MENU_NULL);
 	mmenu_set_all(MENU_L2, MENU_NULL);
@@ -770,7 +774,7 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 	edobj = 0;
 	movedir = 0;	/* No edit modes set */
 
-	oedit_accept();
+	oedit_accept(s);
 
 	mmenu_set_all(MENU_L2, MENU_NULL);
 
@@ -823,7 +827,7 @@ be_reject(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 	    mmenu_set_all(MENU_L1, MENU_NULL);
 	    mmenu_set_all(MENU_L2, MENU_NULL);
 
-	    sedit_reject();
+	    sedit_reject(s);
 	    break;
 
 	case ST_O_EDIT:
@@ -1032,7 +1036,7 @@ state_err(char *str)
  * Called when a menu item is hit
  */
 void
-btn_item_hit(int arg, int menu, int UNUSED(item))
+btn_item_hit(struct mged_state *UNUSED(s), int arg, int menu, int UNUSED(item))
 {
     button(arg);
     if (menu == MENU_GEN &&
@@ -1046,7 +1050,7 @@ btn_item_hit(int arg, int menu, int UNUSED(item))
  * Also called from main() with arg 0 in init.
  */
 void
-btn_head_menu(int i, int UNUSED(menu), int UNUSED(item)) {
+btn_head_menu(struct mged_state *UNUSED(s), int i, int UNUSED(menu), int UNUSED(item)) {
     switch (i) {
 	case 0:
 	    mmenu_set(MENU_GEN, first_menu);
