@@ -299,7 +299,7 @@ mged_post_opendb_clbk(struct ged *gedp, void *ctx)
     Tcl_AppendResult(mctx->interpreter, bu_vls_addr(gedp->ged_result_str), (char *)NULL);
 
     /* Update the background colors now that we have a file open */
-    cs_set_bg(NULL, NULL, NULL, NULL, gedp);
+    cs_set_bg(NULL, NULL, NULL, NULL, mctx->s);
 
     mctx->post_open_cnt--;
     mctx->ret = TCL_OK;

@@ -475,6 +475,7 @@ mged_setup(Tcl_Interp **interpreter)
     BU_GET(MGED_STATE, struct mged_state);
     struct mged_state *s = MGED_STATE;
     s->interp = interpreter;
+    mged_global_db_ctx->s = s;
 
     BU_GET(s->GEDP, struct ged);
     GED_INIT(s->GEDP, NULL);
