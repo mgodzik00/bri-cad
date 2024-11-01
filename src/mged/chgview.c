@@ -2285,7 +2285,7 @@ f_knob(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 				if (STATE == ST_S_EDIT) {
 				    sedit_abs_scale(s);
 				} else {
-				    oedit_abs_scale();
+				    oedit_abs_scale(s);
 				}
 			    } else {
 				view_state->vs_gvp->gv_a_scale += f;
@@ -2298,7 +2298,7 @@ f_knob(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 				if (STATE == ST_S_EDIT) {
 				    sedit_abs_scale(s);
 				} else {
-				    oedit_abs_scale();
+				    oedit_abs_scale(s);
 				}
 			    } else {
 				view_state->vs_gvp->gv_a_scale = f;
@@ -3368,7 +3368,7 @@ mged_erot(struct mged_state *s,
 	 */
 	wrt_point(modelchanges, newrot, modelchanges, point);
 
-	new_edit_mats();
+	new_edit_mats(s);
     }
 
     return TCL_OK;
@@ -3709,7 +3709,7 @@ mged_etran(struct mged_state *s,
 	MAT_DELTAS_VEC(xlatemat, delta);
 	bn_mat_mul2(xlatemat, modelchanges);
 
-	new_edit_mats();
+	new_edit_mats(s);
 	update_views = 1;
 	dm_set_dirty(DMP, 1);
     }
@@ -3922,7 +3922,7 @@ mged_escale(struct mged_state *s, fastf_t sfactor)
 	MAT4X3PNT(pos_model, modelchanges, temp);
 	wrt_point(modelchanges, smat, modelchanges, pos_model);
 
-	new_edit_mats();
+	new_edit_mats(s);
     }
 
     return TCL_OK;

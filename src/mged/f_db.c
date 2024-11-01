@@ -52,7 +52,7 @@ void
 mged_refresh_handler(void *UNUSED(clientdata))
 {
     view_state->vs_flag = 1;
-    refresh();
+    refresh(s);
 }
 
 static void

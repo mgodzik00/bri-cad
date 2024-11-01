@@ -7169,7 +7169,7 @@ sedit_abs_scale(struct mged_state *s)
  * Object Edit
  */
 void
-objedit_mouse(const vect_t mousevec)
+objedit_mouse(struct mged_state *s, const vect_t mousevec)
 {
     fastf_t scale = 1.0;
     vect_t pos_view;	 	/* Unrotated view space pos */
@@ -7237,7 +7237,7 @@ objedit_mouse(const vect_t mousevec)
 	wrt_point(modelchanges, incr_change, modelchanges, pos_model);
 
 	MAT_IDN(incr_change);
-	new_edit_mats();
+	new_edit_mats(s);
     } else if (movedir & (RARROW|UARROW)) {
 	mat_t oldchanges;	/* temporary matrix */
 
@@ -7258,7 +7258,7 @@ objedit_mouse(const vect_t mousevec)
 	bn_mat_mul(modelchanges, incr_change, oldchanges);
 
 	MAT_IDN(incr_change);
-	new_edit_mats();
+	new_edit_mats(s);
 
 	update_edit_absolute_tran(pos_view);
     } else {
@@ -7269,7 +7269,7 @@ objedit_mouse(const vect_t mousevec)
 
 
 void
-oedit_abs_scale(void)
+oedit_abs_scale(struct mged_state *s)
 {
     fastf_t scale;
     vect_t temp;
@@ -7327,7 +7327,7 @@ oedit_abs_scale(void)
     MAT4X3PNT(pos_model, modelchanges, temp);
     wrt_point(modelchanges, incr_mat, modelchanges, pos_model);
 
-    new_edit_mats();
+    new_edit_mats(s);
 }
 
 
@@ -9218,8 +9218,12 @@ f_sedit_apply(ClientData clientData, Tcl_Interp *interp, int UNUSED(argc), const
 
 
 int
-f_oedit_reset(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const char *UNUSED(argv[]))
+f_oedit_reset(ClientData clientData, Tcl_Interp *interp, int argc, const char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     struct bu_vls vls = BU_VLS_INIT_ZERO;
 
     if (STATE != ST_O_EDIT)
@@ -9235,7 +9239,7 @@ f_oedit_reset(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const
     oedit_reject();
     init_oedit_guts();
 
-    new_edit_mats();
+    new_edit_mats(s);
     update_views = 1;
     dm_set_dirty(DMP, 1);
 
@@ -9274,7 +9278,7 @@ f_oedit_apply(ClientData clientData, Tcl_Interp *interp, int UNUSED(argc), const
 
     get_solid_keypoint(es_keypoint, &strp, &es_int, es_mat);
     init_oedit_vars();
-    new_edit_mats();
+    new_edit_mats(s);
     update_views = 1;
     dm_set_dirty(DMP, 1);
 

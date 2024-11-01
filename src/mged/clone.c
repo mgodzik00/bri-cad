@@ -1153,7 +1153,7 @@ f_tracker(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[
 		    size_reset(mged_s);
 		    new_mats();
 		    mged_color_soltab(mged_s);
-		    refresh();
+		    refresh(mged_s);
 		}
 		fprintf(stdout, ".");
 		fflush(stdout);

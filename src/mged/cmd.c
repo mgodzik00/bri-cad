@@ -1367,8 +1367,11 @@ mged_cmd(
  * Let the user temporarily escape from the editor Format: %
  */
 int
-f_comm(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
+f_comm(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
 
     if (argc != 1 || !classic_mged || curr_cmd_list != &head_cmd_list) {
 	struct bu_vls vls = BU_VLS_INIT_ZERO;
@@ -1389,7 +1392,7 @@ f_comm(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const c
 	    (void)signal(SIGINT, SIG_DFL);
 	    (void)execl("/bin/sh", "-", (char *)NULL);
 	    perror("/bin/sh");
-	    mged_finish(11);
+	    mged_finish(s, 11);
 	}
 
 	while ((rpid = wait(&retcode)) != pid && rpid != -1)
@@ -1407,8 +1410,12 @@ f_comm(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const c
  * Quit and exit gracefully. Format: q
  */
 int
-f_quit(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
+f_quit(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     BU_PUT (MGED_STATE, struct mged_state);
 
     if (argc < 1 || 1 < argc) {
@@ -1423,7 +1430,7 @@ f_quit(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const c
     if (STATE != ST_VIEW)
 	button(BE_REJECT);
 
-    quit();			/* Exiting time */
+    quit(s);			/* Exiting time */
     /* NOTREACHED */
     return TCL_OK;
 }
@@ -1620,7 +1627,7 @@ f_postscript(ClientData clientData, Tcl_Interp *interpreter, int argc, const cha
 
     DMP_dirty = 1;
     dm_set_dirty(DMP, 1);
-    refresh();
+    refresh(s);
 
     view_state = vsp;  /* restore state info pointer */
     av[0] = "release";

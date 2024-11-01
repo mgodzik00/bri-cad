@@ -218,13 +218,13 @@ extern void itoa(int n, char *s, int w);
 #endif
 extern void eraseobj(struct directory **dpp);
 extern void eraseobjall(struct directory **dpp);
-extern void mged_finish(int exitcode);
+extern void mged_finish(struct mged_state *s, int exitcode);
 extern void slewview(struct mged_state *s, vect_t view_pos);
 extern void mmenu_init(void);
 extern void moveHinstance(struct directory *cdp, struct directory *dp, matp_t xlate);
 extern void moveHobj(struct directory *dp, matp_t xlate);
-extern void quit(void);
-extern void refresh(void);
+extern void quit(struct mged_state *s);
+extern void refresh(struct mged_state *s);
 extern void sedit(struct mged_state *s);
 extern void setview(struct mged_state *s, double a1, double a2, double a3);
 extern void adcursor(void);
@@ -572,8 +572,8 @@ void mged_pre_closedb_clbk(struct ged *gedp, void *ctx);
 void mged_post_closedb_clbk(struct ged *gedp, void *ctx);
 
 /* mged.c */
-int event_check(int non_blocking);
-void new_edit_mats(void);
+int event_check(struct mged_state *s, int non_blocking);
+void new_edit_mats(struct mged_state *s);
 void new_mats(void);
 void pr_beep(void);
 
@@ -636,10 +636,10 @@ void sedit_accept(struct mged_state *s);
 void sedit_mouse(struct mged_state *s, const vect_t mousevec);
 void sedit_reject(struct mged_state *s);
 void sedit_vpick(struct mged_state *s, point_t v_pos);
-void oedit_abs_scale(void);
+void oedit_abs_scale(struct mged_state *s);
 void oedit_accept(struct mged_state *s);
 void oedit_reject(void);
-void objedit_mouse(const vect_t mousevec);
+void objedit_mouse(struct mged_state *s, const vect_t mousevec);
 extern int nurb_closest2d(int *surface, int *uval, int *vval, const struct rt_nurb_internal *spl, const point_t ref_pt, const mat_t mat);
 void label_edited_solid(int *num_lines, point_t *lines, struct rt_point_labels pl[], int max_pl, const mat_t xform, struct rt_db_internal *ip);
 void init_oedit(void);
