@@ -299,7 +299,7 @@ mged_post_opendb_clbk(struct ged *gedp, void *ctx)
     Tcl_AppendResult(mctx->interpreter, bu_vls_addr(gedp->ged_result_str), (char *)NULL);
 
     /* Update the background colors now that we have a file open */
-    cs_set_bg(NULL, NULL, NULL, NULL, s);
+    cs_set_bg(NULL, NULL, NULL, NULL, gedp);
 
     mctx->post_open_cnt--;
     mctx->ret = TCL_OK;
@@ -337,8 +337,12 @@ mged_post_closedb_clbk(struct ged *UNUSED(gedp), void *ctx)
  * NOT opened (and the user didn't abort).
  */
 int
-f_opendb(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
+f_opendb(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     struct mged_opendb_ctx ctx;
     ctx.old_dbip = NULL;
 
@@ -380,18 +384,18 @@ f_opendb(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const
     // and callbacks to manage a default ctx.  However, if we're going the
     // f_opendb route, our options are handled a bit differently - use a local
     // data container for this call and stash the default.
-    void (*pre_opendb_clbk)(struct ged *, void *) = GEDP->ged_pre_opendb_callback;
-    void (*post_opendb_clbk)(struct ged *, void *) = GEDP->ged_post_opendb_callback;
-    void (*pre_closedb_clbk)(struct ged *, void *) = GEDP->ged_pre_closedb_callback;
-    void (*post_closedb_clbk)(struct ged *, void *) = GEDP->ged_post_closedb_callback;
-    void *gctx = GEDP->ged_db_callback_udata;
+    void (*pre_opendb_clbk)(struct ged *, void *) = s->GEDP->ged_pre_opendb_callback;
+    void (*post_opendb_clbk)(struct ged *, void *) = s->GEDP->ged_post_opendb_callback;
+    void (*pre_closedb_clbk)(struct ged *, void *) = s->GEDP->ged_pre_closedb_callback;
+    void (*post_closedb_clbk)(struct ged *, void *) = s->GEDP->ged_post_closedb_callback;
+    void *gctx = s->GEDP->ged_db_callback_udata;
 
     // Assign the local values
-    GEDP->ged_pre_opendb_callback = NULL;
-    GEDP->ged_post_opendb_callback = &mged_post_opendb_clbk;
-    GEDP->ged_pre_closedb_callback = &mged_pre_closedb_clbk;
-    GEDP->ged_post_closedb_callback = &mged_post_closedb_clbk;
-    GEDP->ged_db_callback_udata = (void *)&ctx;
+    s->GEDP->ged_pre_opendb_callback = NULL;
+    s->GEDP->ged_post_opendb_callback = &mged_post_opendb_clbk;
+    s->GEDP->ged_pre_closedb_callback = &mged_pre_closedb_clbk;
+    s->GEDP->ged_post_closedb_callback = &mged_post_closedb_clbk;
+    s->GEDP->ged_db_callback_udata = (void *)&ctx;
 
     const char **av = (const char **)bu_calloc(argc+2, sizeof(const char *), "av");
     int ind = 0;
@@ -407,14 +411,14 @@ f_opendb(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const
     ctx.argv = av;
     ctx.argc = argc+ind;
 
-    ctx.ged_ret = ged_exec(GEDP, argc+ind, (const char **)av);
+    ctx.ged_ret = ged_exec(s->GEDP, argc+ind, (const char **)av);
 
     // Done - restore standard values
-    GEDP->ged_pre_opendb_callback = pre_opendb_clbk;
-    GEDP->ged_post_opendb_callback = post_opendb_clbk;
-    GEDP->ged_pre_closedb_callback = pre_closedb_clbk;
-    GEDP->ged_post_closedb_callback = post_closedb_clbk;
-    GEDP->ged_db_callback_udata = gctx;
+    s->GEDP->ged_pre_opendb_callback = pre_opendb_clbk;
+    s->GEDP->ged_post_opendb_callback = post_opendb_clbk;
+    s->GEDP->ged_pre_closedb_callback = pre_closedb_clbk;
+    s->GEDP->ged_post_closedb_callback = post_closedb_clbk;
+    s->GEDP->ged_db_callback_udata = gctx;
 
     if (ctx.ged_ret == GED_HELP) {
 	Tcl_Eval(interpreter, "help opendb");
@@ -428,8 +432,12 @@ f_opendb(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const
  * Close the current database, if open.
  */
 int
-f_closedb(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
+f_closedb(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     // For the most part when it comes to close, the default
     // callbacks should be fine, but since f_closedb potentially
     // specifies a Tcl_Interp prepare a context to be sure
@@ -450,15 +458,15 @@ f_closedb(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, cons
 	return TCL_OK;
     }
 
-    void *gctx = GEDP->ged_db_callback_udata;
-    GEDP->ged_db_callback_udata = (void *)&ctx;
+    void *gctx = s->GEDP->ged_db_callback_udata;
+    s->GEDP->ged_db_callback_udata = (void *)&ctx;
 
     const char *av[2];
     av[0] = "closedb";
     av[1] = NULL;
-    ged_exec(GEDP, 1, (const char **)av);
+    ged_exec(s->GEDP, 1, (const char **)av);
 
-    GEDP->ged_db_callback_udata = gctx;
+    s->GEDP->ged_db_callback_udata = gctx;
 
     return ctx.ret;
 }
