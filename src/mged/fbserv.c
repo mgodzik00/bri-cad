@@ -115,6 +115,7 @@ fbserv_drop_client(int sub)
  * support elimination of globals down the road. */
 struct c_data {
     int fd;
+    struct mged_state *s;
 };
 
 /*
@@ -127,6 +128,7 @@ fbserv_existing_client_handler(ClientData clientData, int UNUSED(mask))
 
     struct c_data *d = (struct c_data *)clientData;
     int fd = d->fd;
+    struct mged_state *s = d->s;
 
     int npp;			/* number of processed packages */
     struct mged_dm *dlp = MGED_DM_NULL;
@@ -147,7 +149,7 @@ fbserv_existing_client_handler(ClientData clientData, int UNUSED(mask))
     /* save */
     scdlp = mged_curr_dm;
 
-    set_curr_dm(dlp);
+    set_curr_dm(s, dlp);
     for (i = MAX_CLIENTS-1; i >= 0; i--) {
 	if (clients[i].c_fd == 0)
 	    continue;
@@ -184,7 +186,7 @@ fbserv_existing_client_handler(ClientData clientData, int UNUSED(mask))
     }
 
     /* restore */
-    set_curr_dm(scdlp);
+    set_curr_dm(s, scdlp);
 }
 
 
@@ -240,13 +242,13 @@ fbserv_new_client_handler(ClientData clientData,
     /* save */
     scdlp = mged_curr_dm;
 
-    set_curr_dm(dlp);
+    set_curr_dm(s, dlp);
 
     if (Tcl_GetChannelHandle(chan, TCL_READABLE, (ClientData *)&fd) == TCL_OK)
 	fbserv_new_client(fbserv_makeconn((int)fd, pkg_switch), chan);
 
     /* restore */
-    set_curr_dm(scdlp);
+    set_curr_dm(s, scdlp);
 }
 
 
@@ -369,7 +371,7 @@ fbserv_makeconn(int fd,
 #else /* defined(_WIN32) && !defined(__CYGWIN__) */
 
 static void
-fbserv_new_client(struct pkg_conn *pcp)
+fbserv_new_client(struct mged_state *s, struct pkg_conn *pcp)
 {
     int i;
 
@@ -388,6 +390,7 @@ fbserv_new_client(struct pkg_conn *pcp)
 	struct c_data *ed;
 	BU_GET(ed, struct c_data);
 	ed->fd = clients[i].c_fd;
+	ed->s = s;
 	Tcl_CreateFileHandler(clients[i].c_fd, TCL_READABLE,
 			      fbserv_existing_client_handler, (ClientData)ed);
 
@@ -407,6 +410,7 @@ fbserv_new_client_handler(ClientData clientData, int UNUSED(mask))
 {
     struct c_data *d = (struct c_data *)clientData;
     int fd = d->fd;
+    struct mged_state *s = d->s;
     struct mged_dm *dlp;
     struct mged_dm *scdlp;  /* save current dm_list pointer */
 
@@ -424,19 +428,19 @@ fbserv_new_client_handler(ClientData clientData, int UNUSED(mask))
     /* save */
     scdlp = mged_curr_dm;
 
-    set_curr_dm(dlp);
-    fbserv_new_client(pkg_getclient(fd, pkg_switch, communications_error, 0));
+    set_curr_dm(s, dlp);
+    fbserv_new_client(s, pkg_getclient(fd, pkg_switch, communications_error, 0));
 
     // Data handed off to fbserv_existing_client_handler, we should be done with this now.
     BU_PUT(d, struct c_data);
 
     /* restore */
-    set_curr_dm(scdlp);
+    set_curr_dm(s, scdlp);
 }
 
 
 void
-fbserv_set_port(const struct bu_structparse *UNUSED(sp), const char *UNUSED(c1), void *UNUSED(v1), const char *UNUSED(c2), void *UNUSED(v2))
+fbserv_set_port(struct mged_state *s, const struct bu_structparse *UNUSED(sp), const char *UNUSED(c1), void *UNUSED(v1), const char *UNUSED(c2), void *UNUSED(v2))
 {
     int i;
     int save_port;
@@ -495,6 +499,7 @@ fbserv_set_port(const struct bu_structparse *UNUSED(sp), const char *UNUSED(c1),
 	struct c_data *ncdata;
 	BU_GET(ncdata, struct c_data);
 	ncdata->fd = netfd;
+	ncdata->s = s;
 	Tcl_CreateFileHandler(netfd, TCL_READABLE,
 			      fbserv_new_client_handler, (ClientData)ncdata);
     }
