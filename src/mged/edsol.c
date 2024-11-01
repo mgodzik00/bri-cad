@@ -2616,7 +2616,7 @@ init_sedit(struct mged_state *s)
 
     /* Finally, enter solid edit state */
     (void)chg_state(s, ST_S_PICK, ST_S_EDIT, "Keyboard illuminate");
-    chg_l2menu(ST_S_EDIT);
+    chg_l2menu(s, ST_S_EDIT);
     es_edflag = IDLE;
 
     button(BE_S_EDIT);	/* Drop into edit menu right away */
@@ -2718,83 +2718,83 @@ transform_editing_solid(
  * Put up menu header
  */
 void
-sedit_menu(void) {
+sedit_menu(struct mged_state *s) {
 
     menu_state->ms_flag = 0;		/* No menu item selected yet */
 
-    mmenu_set_all(MENU_L1, MENU_NULL);
-    chg_l2menu(ST_S_EDIT);
+    mmenu_set_all(s, MENU_L1, MENU_NULL);
+    chg_l2menu(s, ST_S_EDIT);
 
     switch (es_int.idb_type) {
 
 	case ID_ARB8:
-	    mmenu_set_all(MENU_L1, cntrl_menu);
+	    mmenu_set_all(s, MENU_L1, cntrl_menu);
 	    break;
 	case ID_TGC:
-	    mmenu_set_all(MENU_L1, tgc_menu);
+	    mmenu_set_all(s, MENU_L1, tgc_menu);
 	    break;
 	case ID_TOR:
-	    mmenu_set_all(MENU_L1, tor_menu);
+	    mmenu_set_all(s, MENU_L1, tor_menu);
 	    break;
 	case ID_ELL:
-	    mmenu_set_all(MENU_L1, ell_menu);
+	    mmenu_set_all(s, MENU_L1, ell_menu);
 	    break;
 	case ID_SUPERELL:
-	    mmenu_set_all(MENU_L1, superell_menu);
+	    mmenu_set_all(s, MENU_L1, superell_menu);
 	    break;
 	case ID_ARS:
-	    mmenu_set_all(MENU_L1, ars_menu);
+	    mmenu_set_all(s, MENU_L1, ars_menu);
 	    break;
 	case ID_BSPLINE:
-	    mmenu_set_all(MENU_L1, spline_menu);
+	    mmenu_set_all(s, MENU_L1, spline_menu);
 	    break;
 	case ID_RPC:
-	    mmenu_set_all(MENU_L1, rpc_menu);
+	    mmenu_set_all(s, MENU_L1, rpc_menu);
 	    break;
 	case ID_RHC:
-	    mmenu_set_all(MENU_L1, rhc_menu);
+	    mmenu_set_all(s, MENU_L1, rhc_menu);
 	    break;
 	case ID_EPA:
-	    mmenu_set_all(MENU_L1, epa_menu);
+	    mmenu_set_all(s, MENU_L1, epa_menu);
 	    break;
 	case ID_EHY:
-	    mmenu_set_all(MENU_L1, ehy_menu);
+	    mmenu_set_all(s, MENU_L1, ehy_menu);
 	    break;
 	case ID_HYP:
-	    mmenu_set_all(MENU_L1, hyp_menu);
+	    mmenu_set_all(s, MENU_L1, hyp_menu);
 	    break;
 	case ID_ETO:
-	    mmenu_set_all(MENU_L1, eto_menu);
+	    mmenu_set_all(s, MENU_L1, eto_menu);
 	    break;
 	case ID_NMG:
-	    mmenu_set_all(MENU_L1, nmg_menu);
+	    mmenu_set_all(s, MENU_L1, nmg_menu);
 	    break;
 	case ID_PIPE:
-	    mmenu_set_all(MENU_L1, pipe_menu);
+	    mmenu_set_all(s, MENU_L1, pipe_menu);
 	    break;
 	case ID_METABALL:
-	    mmenu_set_all(MENU_L1, metaball_menu);
+	    mmenu_set_all(s, MENU_L1, metaball_menu);
 	    break;
 	case ID_VOL:
-	    mmenu_set_all(MENU_L1, vol_menu);
+	    mmenu_set_all(s, MENU_L1, vol_menu);
 	    break;
 	case ID_EBM:
-	    mmenu_set_all(MENU_L1, ebm_menu);
+	    mmenu_set_all(s, MENU_L1, ebm_menu);
 	    break;
 	case ID_DSP:
-	    mmenu_set_all(MENU_L1, dsp_menu);
+	    mmenu_set_all(s, MENU_L1, dsp_menu);
 	    break;
 	case ID_PARTICLE:
-	    mmenu_set_all(MENU_L1, part_menu);
+	    mmenu_set_all(s, MENU_L1, part_menu);
 	    break;
 	case ID_BOT:
-	    mmenu_set_all(MENU_L1, bot_menu);
+	    mmenu_set_all(s, MENU_L1, bot_menu);
 	    break;
 	case ID_EXTRUDE:
-	    mmenu_set_all(MENU_L1, extr_menu);
+	    mmenu_set_all(s, MENU_L1, extr_menu);
 	    break;
 	case ID_CLINE:
-	    mmenu_set_all(MENU_L1, cline_menu);
+	    mmenu_set_all(s, MENU_L1, cline_menu);
 	    break;
     }
     es_edflag = IDLE;	/* Drop out of previous edit mode */

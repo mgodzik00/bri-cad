@@ -760,8 +760,8 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 
 	sedit_accept(s);		/* zeros "edsol" var */
 
-	mmenu_set_all(MENU_L1, MENU_NULL);
-	mmenu_set_all(MENU_L2, MENU_NULL);
+	mmenu_set_all(s, MENU_L1, MENU_NULL);
+	mmenu_set_all(s, MENU_L2, MENU_NULL);
 
 	dl_set_iflag(s->GEDP->ged_gdp->gd_headDisplay, DOWN);
 
@@ -776,7 +776,7 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 
 	oedit_accept(s);
 
-	mmenu_set_all(MENU_L2, MENU_NULL);
+	mmenu_set_all(s, MENU_L2, MENU_NULL);
 
 	illum_gdlp = GED_DISPLAY_LIST_NULL;
 	illump = NULL;
@@ -824,14 +824,14 @@ be_reject(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 
 	case ST_S_EDIT:
 	    /* Reject a solid edit */
-	    mmenu_set_all(MENU_L1, MENU_NULL);
-	    mmenu_set_all(MENU_L2, MENU_NULL);
+	    mmenu_set_all(s, MENU_L1, MENU_NULL);
+	    mmenu_set_all(s, MENU_L2, MENU_NULL);
 
 	    sedit_reject(s);
 	    break;
 
 	case ST_O_EDIT:
-	    mmenu_set_all(MENU_L2, MENU_NULL);
+	    mmenu_set_all(s, MENU_L2, MENU_NULL);
 
 	    oedit_reject();
 	    break;
@@ -875,14 +875,18 @@ be_reject(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 
 
 int
-be_s_edit(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+be_s_edit(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     /* solid editing */
     if (not_state(ST_S_EDIT, "Primitive Edit (Menu)"))
 	return TCL_ERROR;
 
     edsol = BE_S_EDIT;
-    sedit_menu();		/* Install appropriate menu */
+    sedit_menu(s);		/* Install appropriate menu */
     return TCL_OK;
 }
 
@@ -1076,16 +1080,16 @@ btn_head_menu(struct mged_state *UNUSED(s), int i, int UNUSED(menu), int UNUSED(
 
 
 void
-chg_l2menu(int i) {
+chg_l2menu(struct mged_state *s, int i) {
     switch (i) {
 	case ST_S_EDIT:
-	    mmenu_set_all(MENU_L2, sed_menu);
+	    mmenu_set_all(s, MENU_L2, sed_menu);
 	    break;
 	case ST_S_NO_EDIT:
-	    mmenu_set_all(MENU_L2, MENU_NULL);
+	    mmenu_set_all(s, MENU_L2, MENU_NULL);
 	    break;
 	case ST_O_EDIT:
-	    mmenu_set_all(MENU_L2, oed_menu);
+	    mmenu_set_all(s, MENU_L2, oed_menu);
 	    break;
 	default:
 	    {

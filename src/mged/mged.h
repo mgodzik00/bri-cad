@@ -230,8 +230,8 @@ extern void setview(struct mged_state *s, double a1, double a2, double a3);
 extern void adcursor(void);
 extern void mmenu_display(int y_top);
 extern void mmenu_set(int idx, struct menu_item *value);
-extern void mmenu_set_all(int idx, struct menu_item *value);
-extern void sedit_menu(void);
+extern void mmenu_set_all(struct mged_state *s, int idx, struct menu_item *value);
+extern void sedit_menu(struct mged_state *s);
 extern void get_attached(struct mged_state *s);
 extern void (*cur_sigint)(int);	/* Current SIGINT status */
 extern void sig2(int);
@@ -471,7 +471,7 @@ int gui_setup(const char *dstr);
 
 /* buttons.c */
 void btn_head_menu(struct mged_state *s, int i, int menu, int item);
-void chg_l2menu(int i);
+void chg_l2menu(struct mged_state *s, int i);
 
 /* chgmodel.c */
 int extract_mater_from_line(
@@ -589,7 +589,7 @@ extern void snap_view_to_grid(fastf_t view_dx, fastf_t view_dy);
 extern void draw_grid(void);
 
 /* menu.c */
-int mmenu_select(int pen_y, int do_func);
+int mmenu_select(struct mged_state *s, int pen_y, int do_func);
 
 /* predictor.c */
 extern void predictor_frame(void);

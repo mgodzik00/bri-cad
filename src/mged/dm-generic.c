@@ -127,7 +127,7 @@ common_dm(struct mged_state *s, int argc, const char *argv[])
 		goto end;
 	    }
 
-	    if (x < MENUXLIM && mmenu_select(y, 0)) {
+	    if (x < MENUXLIM && mmenu_select(s, y, 0)) {
 		stolen = 1;
 		goto end;
 	    }
