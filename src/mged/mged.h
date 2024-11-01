@@ -694,7 +694,7 @@ extern void mged_vls_struct_parse_old(struct bu_vls *vls, const char *title, str
 int build_tops(char **start, char **end);
 
 /* mater.c */
-void mged_color_soltab(void);
+void mged_color_soltab(struct mged_state *s);
 
 /* utility1.c */
 int editit(const char *command, const char *tempfile);

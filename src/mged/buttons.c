@@ -148,7 +148,7 @@ static mat_t sav_viewrot, sav_toviewcenter;
 static fastf_t sav_vscale;
 static int vsaved = 0;	/* set if view saved */
 
-extern void mged_color_soltab(void);
+extern void mged_color_soltab(struct mged_state *s);
 extern void sl_halt_scroll(struct mged_state *s, int, int, int);	/* in scroll.c */
 extern void sl_toggle_scroll(struct mged_state *s, int, int, int);
 
@@ -767,7 +767,7 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 
 	illum_gdlp = GED_DISPLAY_LIST_NULL;
 	illump = NULL;
-	mged_color_soltab();
+	mged_color_soltab(s);
 	(void)chg_state(s, ST_S_EDIT, ST_VIEW, "Edit Accept");
     }  else if (STATE == ST_O_EDIT) {
 	/* Accept an object edit */
@@ -780,7 +780,7 @@ be_accept(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
 
 	illum_gdlp = GED_DISPLAY_LIST_NULL;
 	illump = NULL;
-	mged_color_soltab();
+	mged_color_soltab(s);
 	(void)chg_state(s, ST_O_EDIT, ST_VIEW, "Edit Accept");
     } else {
 	if (not_state(ST_S_EDIT, "Edit Accept"))
@@ -854,7 +854,7 @@ be_reject(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), c
     /* Clear illumination flags */
     dl_set_iflag(s->GEDP->ged_gdp->gd_headDisplay, DOWN);
 
-    mged_color_soltab();
+    mged_color_soltab(s);
     (void)chg_state(s, STATE, ST_VIEW, "Edit Reject");
 
     for (size_t i = 0; i < BU_PTBL_LEN(&active_dm_set); i++) {

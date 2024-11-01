@@ -40,7 +40,7 @@
 #include "./cmd.h"
 
 
-extern void mged_color_soltab(void);
+extern void mged_color_soltab(struct mged_state *s);
 extern void set_absolute_tran(void); /* defined in set.c */
 extern void set_absolute_view_tran(void); /* defined in set.c */
 extern void set_absolute_model_tran(void); /* defined in set.c */
