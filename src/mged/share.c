@@ -92,8 +92,12 @@ void free_all_resources(struct mged_dm *dlp);
  *	share -u res_type p	--->	causes 'p' to no longer share resource of type 'res_type'
  */
 int
-f_share(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
+f_share(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     int uflag = 0;		/* unshare flag */
     struct mged_dm *dlp1 = MGED_DM_NULL;
     struct mged_dm *dlp2 = MGED_DM_NULL;
@@ -190,11 +194,11 @@ f_share(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const 
 
 			    save_dlp = mged_curr_dm;
 
-			    set_curr_dm(dlp1);
-			    createDLists(GEDP->ged_gdp->gd_headDisplay);
+			    set_curr_dm(s, dlp1);
+			    createDLists(s->GEDP->ged_gdp->gd_headDisplay);
 
 			    /* restore */
-			    set_curr_dm(save_dlp);
+			    set_curr_dm(s, save_dlp);
 			}
 
 			dlp1->dm_dirty = 1;

@@ -697,7 +697,7 @@ int build_tops(char **start, char **end);
 void mged_color_soltab(struct mged_state *s);
 
 /* utility1.c */
-int editit(const char *command, const char *tempfile);
+int editit(struct mged_state *s, const char *command, const char *tempfile);
 
 int Wdb_Init(Tcl_Interp *interp);
 int wdb_cmd(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]);
