@@ -763,10 +763,10 @@ plot_getBoundFlag(struct dm *dmp)
 
 #define plot_MV_O(_m) offsetof(struct plot_mvars, _m)
 struct bu_structparse plot_vparse[] = {
-    {"%g",  1, "bound",         plot_MV_O(bound),       dm_generic_hook, NULL, NULL, NULL},
-    {"%d",  1, "useBound",      plot_MV_O(boundFlag),   dm_generic_hook, NULL, NULL, NULL},
-    {"%d",  1, "zclip",         plot_MV_O(zclip),       dm_generic_hook, NULL, NULL, NULL},
-    {"",    0, (char *)0,       0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%g",  1, "bound",         plot_MV_O(bound),       dm_generic_hook, NULL, NULL},
+    {"%d",  1, "useBound",      plot_MV_O(boundFlag),   dm_generic_hook, NULL, NULL},
+    {"%d",  1, "zclip",         plot_MV_O(zclip),       dm_generic_hook, NULL, NULL},
+    {"",    0, (char *)0,       0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL}
 };
 
 struct dm_impl dm_plot_impl = {

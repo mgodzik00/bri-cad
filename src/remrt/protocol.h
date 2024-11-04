@@ -70,13 +70,13 @@ struct line_info  {
 #define LINE_O(x)	bu_offsetof(struct  line_info, x)
 
 struct bu_structparse desc_line_info[] =  {
-    {"%d", 1, "li_startpix",	LINE_O(li_startpix),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d", 1, "li_endpix",	LINE_O(li_endpix),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d", 1, "li_frame",	LINE_O(li_frame),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d", 1, "li_nrays",	LINE_O(li_nrays),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%g", 1, "li_cpusec",	LINE_O(li_cpusec),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%g", 1, "li_percent",	LINE_O(li_percent),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",   0, NULL,		0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%d", 1, "li_startpix",	LINE_O(li_startpix),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d", 1, "li_endpix",	LINE_O(li_endpix),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d", 1, "li_frame",	LINE_O(li_frame),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d", 1, "li_nrays",	LINE_O(li_nrays),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%g", 1, "li_cpusec",	LINE_O(li_cpusec),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%g", 1, "li_percent",	LINE_O(li_percent),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",   0, NULL,		0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 #endif  /* REMRT_PROTOCOL_H */

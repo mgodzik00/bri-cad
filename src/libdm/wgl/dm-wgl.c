@@ -797,19 +797,19 @@ wgl_geometry_request(struct dm *dmp, int width, int height)
 #define WGLVARS_MV_O(_m) offsetof(struct dm_wglvars, _m)
 
 struct bu_structparse dm_wglvars_vparse[] = {
-    {"%x",      1,      "dpy",                  WGLVARS_MV_O(dpy),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "win",                  WGLVARS_MV_O(win),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "top",                  WGLVARS_MV_O(top),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "tkwin",                WGLVARS_MV_O(xtkwin),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "depth",                WGLVARS_MV_O(depth),      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "cmap",                 WGLVARS_MV_O(cmap),       BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "vip",                  WGLVARS_MV_O(vip),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "fontstruct",           WGLVARS_MV_O(fontstruct), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "hdc",                  WGLVARS_MV_O(hdc),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devmotionnotify",      WGLVARS_MV_O(devmotionnotify),    BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devbuttonpress",       WGLVARS_MV_O(devbuttonpress),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devbuttonrelease",     WGLVARS_MV_O(devbuttonrelease),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",        0,      (char *)0,              0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%x",      1,      "dpy",                  WGLVARS_MV_O(dpy),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "win",                  WGLVARS_MV_O(win),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "top",                  WGLVARS_MV_O(top),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "tkwin",                WGLVARS_MV_O(xtkwin),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "depth",                WGLVARS_MV_O(depth),      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "cmap",                 WGLVARS_MV_O(cmap),       BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "vip",                  WGLVARS_MV_O(vip),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "fontstruct",           WGLVARS_MV_O(fontstruct), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "hdc",                  WGLVARS_MV_O(hdc),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devmotionnotify",      WGLVARS_MV_O(devmotionnotify),    BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devbuttonpress",       WGLVARS_MV_O(devbuttonpress),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devbuttonrelease",     WGLVARS_MV_O(devbuttonrelease),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",        0,      (char *)0,              0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 int
@@ -861,7 +861,7 @@ struct bu_structparse wgl_vparse[] = {
     {"%V",  1, "log",              gl_MV_O(log),             gl_logfile_hook, NULL, NULL },
     {"%g",  1, "bound",            gl_MV_O(bound),           gl_bound_hook, NULL, NULL },
     {"%d",  1, "useBound",         gl_MV_O(boundFlag),       gl_bound_flag_hook, NULL, NULL },
-    {"",    0, (char *)0,          0,                        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"",    0, (char *)0,          0,                        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 /* Forward declare for dm_wgl_impl */

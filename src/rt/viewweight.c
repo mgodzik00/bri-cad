@@ -56,7 +56,7 @@ extern struct resource resource[];
 
 /* Viewing module specific "set" variables */
 struct bu_structparse view_parse[] = {
-    {"",	0, (char *)0,	0,	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"",	0, (char *)0,	0,	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL}
 };
 
 

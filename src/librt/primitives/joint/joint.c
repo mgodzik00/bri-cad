@@ -65,13 +65,13 @@ struct joint_specific {
 #define JOINT_FLOAT_SIZE 10
 
 const struct bu_structparse rt_joint_parse[] = {
-    { "%f", 3, "V", bu_offsetofarray(struct rt_joint_internal, location, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%V", 1, "RP1", bu_offsetof(struct rt_joint_internal, reference_path_1), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%V", 1, "RP2", bu_offsetof(struct rt_joint_internal, reference_path_2), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V1", bu_offsetofarray(struct rt_joint_internal, vector1, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V2", bu_offsetofarray(struct rt_joint_internal, vector2, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 1, "A", bu_offsetof(struct rt_joint_internal, value), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { {'\0', '\0', '\0', '\0'}, 0, (char *)NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    { "%f", 3, "V", bu_offsetofarray(struct rt_joint_internal, location, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%V", 1, "RP1", bu_offsetof(struct rt_joint_internal, reference_path_1), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%V", 1, "RP2", bu_offsetof(struct rt_joint_internal, reference_path_2), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V1", bu_offsetofarray(struct rt_joint_internal, vector1, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V2", bu_offsetofarray(struct rt_joint_internal, vector2, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 1, "A", bu_offsetof(struct rt_joint_internal, value), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { {'\0', '\0', '\0', '\0'}, 0, (char *)NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

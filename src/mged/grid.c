@@ -60,14 +60,14 @@ struct bv_grid_state default_grid_state = {
 
 #define GRID_O(_m) bu_offsetof(struct bv_grid_state, _m)
 struct bu_structparse grid_vparse[] = {
-    {"%d", 1, "draw",	GRID_O(draw),        set_grid_draw, NULL, NULL, NULL },
-    {"%d", 1, "snap",	GRID_O(snap),        grid_set_dirty_flag, NULL, NULL, NULL },
-    {"%f", 3, "anchor",	GRID_O(anchor),      grid_set_dirty_flag, NULL, NULL, NULL },
-    {"%f", 1, "rh",	GRID_O(res_h),       set_grid_res, NULL, NULL, NULL },
-    {"%f", 1, "rv",	GRID_O(res_v),       set_grid_res, NULL, NULL, NULL },
-    {"%d", 1, "mrh",	GRID_O(res_major_h), set_grid_res, NULL, NULL, NULL },
-    {"%d", 1, "mrv",	GRID_O(res_major_v), set_grid_res, NULL, NULL, NULL },
-    {"",   0, NULL,	0,                   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%d", 1, "draw",	GRID_O(draw),        set_grid_draw, NULL, NULL },
+    {"%d", 1, "snap",	GRID_O(snap),        grid_set_dirty_flag, NULL, NULL },
+    {"%f", 3, "anchor",	GRID_O(anchor),      grid_set_dirty_flag, NULL, NULL },
+    {"%f", 1, "rh",	GRID_O(res_h),       set_grid_res, NULL, NULL },
+    {"%f", 1, "rv",	GRID_O(res_v),       set_grid_res, NULL, NULL },
+    {"%d", 1, "mrh",	GRID_O(res_major_h), set_grid_res, NULL, NULL },
+    {"%d", 1, "mrv",	GRID_O(res_major_v), set_grid_res, NULL, NULL },
+    {"",   0, NULL,	0,                   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

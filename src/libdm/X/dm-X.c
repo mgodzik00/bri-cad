@@ -1823,10 +1823,10 @@ X_openFb(struct dm *dmp)
 
 #define X_MV_O(_m) offsetof(struct X_mvars, _m)
 struct bu_structparse X_vparse[] = {
-    {"%g",  1, "bound",         X_MV_O(bound),          dm_generic_hook, NULL, NULL, NULL},
-    {"%d",  1, "useBound",      X_MV_O(boundFlag),      dm_generic_hook, NULL, NULL, NULL},
-    {"%d",  1, "zclip",         X_MV_O(zclip),          dm_generic_hook, NULL, NULL, NULL},
-    {"",    0, (char *)0,       0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%g",  1, "bound",         X_MV_O(bound),          dm_generic_hook, NULL, NULL},
+    {"%d",  1, "useBound",      X_MV_O(boundFlag),      dm_generic_hook, NULL, NULL},
+    {"%d",  1, "zclip",         X_MV_O(zclip),          dm_generic_hook, NULL, NULL},
+    {"",    0, (char *)0,       0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL}
 };
 
 int
@@ -1840,18 +1840,18 @@ X_geometry_request(struct dm *dmp, int width, int height)
 #define XVARS_MV_O(_m) offsetof(struct dm_Xvars, _m)
 
 struct bu_structparse dm_Xvars_vparse[] = {
-    {"%x",      1,      "dpy",                  XVARS_MV_O(dpy),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "win",                  XVARS_MV_O(win),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "top",                  XVARS_MV_O(top),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "tkwin",                XVARS_MV_O(xtkwin),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "depth",                XVARS_MV_O(depth),      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "cmap",                 XVARS_MV_O(cmap),       BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "vip",                  XVARS_MV_O(vip),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "fontstruct",           XVARS_MV_O(fontstruct), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devmotionnotify",      XVARS_MV_O(devmotionnotify),    BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devbuttonpress",       XVARS_MV_O(devbuttonpress),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devbuttonrelease",     XVARS_MV_O(devbuttonrelease),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",        0,      (char *)0,              0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%x",      1,      "dpy",                  XVARS_MV_O(dpy),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "win",                  XVARS_MV_O(win),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "top",                  XVARS_MV_O(top),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "tkwin",                XVARS_MV_O(xtkwin),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "depth",                XVARS_MV_O(depth),      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "cmap",                 XVARS_MV_O(cmap),       BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "vip",                  XVARS_MV_O(vip),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "fontstruct",           XVARS_MV_O(fontstruct), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devmotionnotify",      XVARS_MV_O(devmotionnotify),    BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devbuttonpress",       XVARS_MV_O(devbuttonpress),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devbuttonrelease",     XVARS_MV_O(devbuttonrelease),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",        0,      (char *)0,              0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 int

@@ -63,14 +63,14 @@ struct rt_ebm_specific {
 #define RT_EBM_O(m) bu_offsetof(struct rt_ebm_internal, m)
 
 const struct bu_structparse rt_ebm_parse[] = {
-    {"%s",	RT_EBM_NAME_LEN, "file", bu_offsetof(struct rt_ebm_internal, name), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%s",	RT_EBM_NAME_LEN, "name", bu_offsetof(struct rt_ebm_internal, name), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%c",	1, "src",	RT_EBM_O(datasrc),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",	1, "w",		RT_EBM_O(xdim),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",	1, "n",		RT_EBM_O(ydim),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	1, "d",		RT_EBM_O(tallness),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	16, "mat", bu_offsetof(struct rt_ebm_internal, mat), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",	0, (char *)0, 0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%s",	RT_EBM_NAME_LEN, "file", bu_offsetof(struct rt_ebm_internal, name), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%s",	RT_EBM_NAME_LEN, "name", bu_offsetof(struct rt_ebm_internal, name), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%c",	1, "src",	RT_EBM_O(datasrc),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",	1, "w",		RT_EBM_O(xdim),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",	1, "n",		RT_EBM_O(ydim),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	1, "d",		RT_EBM_O(tallness),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	16, "mat", bu_offsetof(struct rt_ebm_internal, mat), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",	0, (char *)0, 0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

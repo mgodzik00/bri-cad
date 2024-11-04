@@ -1761,21 +1761,21 @@ void gl_fog_hook(const struct bu_structparse *sdp,
 
 
 struct bu_structparse gl_vparse[] = {
-    {"%d",  1, "depthcue",         gl_MV_O(cueing_on),       gl_colorchange, NULL, NULL, NULL },
-    {"%d",  1, "zclip",            gl_MV_O(zclipping_on),    gl_zclip_hook, NULL, NULL, NULL },
-    {"%d",  1, "zbuffer",          gl_MV_O(zbuffer_on),      gl_zbuffer_hook, NULL, NULL, NULL },
-    {"%d",  1, "lighting",         gl_MV_O(lighting_on),     gl_lighting_hook, NULL, NULL, NULL },
-    {"%d",  1, "transparency",     gl_MV_O(transparency_on), gl_transparency_hook, NULL, NULL, NULL },
-    {"%d",  1, "fastfog",          gl_MV_O(fastfog),         gl_fog_hook, NULL, NULL, NULL },
-    {"%g",  1, "density",          gl_MV_O(fogdensity),      dm_generic_hook, NULL, NULL, NULL },
-    {"%d",  1, "has_zbuf",         gl_MV_O(zbuf),            dm_generic_hook, NULL, NULL, NULL },
-    {"%d",  1, "has_rgb",          gl_MV_O(rgb),             dm_generic_hook, NULL, NULL, NULL },
-    {"%d",  1, "has_doublebuffer", gl_MV_O(doublebuffer),    dm_generic_hook, NULL, NULL, NULL },
-    {"%d",  1, "depth",            gl_MV_O(depth),           dm_generic_hook, NULL, NULL, NULL },
-    {"%V",  1, "log",              gl_MV_O(log),             gl_logfile_hook, NULL, NULL, NULL },
-    {"%g",  1, "bound",            gl_MV_O(bound),           gl_bound_hook, NULL, NULL, NULL },
-    {"%d",  1, "useBound",         gl_MV_O(boundFlag),       gl_bound_flag_hook, NULL, NULL, NULL },
-    {"",    0, (char *)0,          0,                        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%d",  1, "depthcue",         gl_MV_O(cueing_on),       gl_colorchange, NULL, NULL },
+    {"%d",  1, "zclip",            gl_MV_O(zclipping_on),    gl_zclip_hook, NULL, NULL },
+    {"%d",  1, "zbuffer",          gl_MV_O(zbuffer_on),      gl_zbuffer_hook, NULL, NULL },
+    {"%d",  1, "lighting",         gl_MV_O(lighting_on),     gl_lighting_hook, NULL, NULL },
+    {"%d",  1, "transparency",     gl_MV_O(transparency_on), gl_transparency_hook, NULL, NULL },
+    {"%d",  1, "fastfog",          gl_MV_O(fastfog),         gl_fog_hook, NULL, NULL },
+    {"%g",  1, "density",          gl_MV_O(fogdensity),      dm_generic_hook, NULL, NULL },
+    {"%d",  1, "has_zbuf",         gl_MV_O(zbuf),            dm_generic_hook, NULL, NULL },
+    {"%d",  1, "has_rgb",          gl_MV_O(rgb),             dm_generic_hook, NULL, NULL },
+    {"%d",  1, "has_doublebuffer", gl_MV_O(doublebuffer),    dm_generic_hook, NULL, NULL },
+    {"%d",  1, "depth",            gl_MV_O(depth),           dm_generic_hook, NULL, NULL },
+    {"%V",  1, "log",              gl_MV_O(log),             gl_logfile_hook, NULL, NULL },
+    {"%g",  1, "bound",            gl_MV_O(bound),           gl_bound_hook, NULL, NULL },
+    {"%d",  1, "useBound",         gl_MV_O(boundFlag),       gl_bound_flag_hook, NULL, NULL },
+    {"",    0, (char *)0,          0,                        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 /*

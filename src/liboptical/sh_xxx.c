@@ -113,20 +113,20 @@ struct xxx_specific xxx_defaults = {
  * structure above
  */
 struct bu_structparse xxx_print_tab[] = {
-    {"%g", 1, "val",		SHDR_O(xxx_val),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%g", 1, "dist",		SHDR_O(xxx_dist),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f", 3, "delta",		SHDR_O(xxx_delta),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f", 3, "max",		SHDR_O(xxx_max),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f", 3, "min",		SHDR_O(xxx_min),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",   0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%g", 1, "val",		SHDR_O(xxx_val),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%g", 1, "dist",		SHDR_O(xxx_dist),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f", 3, "delta",		SHDR_O(xxx_delta),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f", 3, "max",		SHDR_O(xxx_max),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f", 3, "min",		SHDR_O(xxx_min),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",   0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 
 };
 struct bu_structparse xxx_parse_tab[] = {
-    {"%p", 1, "xxx_print_tab", bu_byteoffset(xxx_print_tab[0]), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%g", 1, "v",		SHDR_O(xxx_val),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%g", 1, "dist",		SHDR_O(xxx_dist),	bu_mm_cvt, NULL, NULL, NULL },
-    {"%f", 3, "d",		SHDR_O(xxx_delta),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",   0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%p", 1, "xxx_print_tab", bu_byteoffset(xxx_print_tab[0]), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%g", 1, "v",		SHDR_O(xxx_val),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%g", 1, "dist",		SHDR_O(xxx_dist),	bu_mm_cvt, NULL, NULL },
+    {"%f", 3, "d",		SHDR_O(xxx_delta),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",   0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

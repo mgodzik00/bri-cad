@@ -145,15 +145,15 @@ static const int farb4[6][4] = {
 #define ARB_AO(_t, _a, _i) offsetof(_t, _a) + sizeof(point_t) * _i + sizeof(point_t) / ELEMENTS_PER_POINT * X
 
 const struct bu_structparse rt_arb_parse[] = {
-    { "%f", 3, "V1", ARB_AO(struct rt_arb_internal, pt, 0), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V2", ARB_AO(struct rt_arb_internal, pt, 1), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V3", ARB_AO(struct rt_arb_internal, pt, 2), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V4", ARB_AO(struct rt_arb_internal, pt, 3), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V5", ARB_AO(struct rt_arb_internal, pt, 4), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V6", ARB_AO(struct rt_arb_internal, pt, 5), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V7", ARB_AO(struct rt_arb_internal, pt, 6), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { "%f", 3, "V8", ARB_AO(struct rt_arb_internal, pt, 7), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    { {'\0', '\0', '\0', '\0'}, 0, (char *)NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    { "%f", 3, "V1", ARB_AO(struct rt_arb_internal, pt, 0), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V2", ARB_AO(struct rt_arb_internal, pt, 1), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V3", ARB_AO(struct rt_arb_internal, pt, 2), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V4", ARB_AO(struct rt_arb_internal, pt, 3), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V5", ARB_AO(struct rt_arb_internal, pt, 4), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V6", ARB_AO(struct rt_arb_internal, pt, 5), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V7", ARB_AO(struct rt_arb_internal, pt, 6), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { "%f", 3, "V8", ARB_AO(struct rt_arb_internal, pt, 7), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    { {'\0', '\0', '\0', '\0'}, 0, (char *)NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

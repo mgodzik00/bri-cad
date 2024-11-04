@@ -389,25 +389,25 @@ orient_hook(const struct bu_structparse *UNUSED(sdp),
  * structure above
  */
 struct bu_structparse img_parse_tab[] = {
-    {"%V",	1, "image",		IMG_O(i_name),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%V",	1, "file",		IMG_O(i_name),		img_source_hook, NULL, NULL, NULL },
-    {"%V",	1, "obj",		IMG_O(i_name),		img_source_hook, NULL, NULL, NULL },
-    {"%V",	1, "object",		IMG_O(i_name),		img_source_hook, NULL, NULL, NULL },
-    {"%d",	1, "w",			IMG_O(i_width),		dimen_hook, NULL, NULL, NULL },
-    {"%d",	1, "n",			IMG_O(i_height),	dimen_hook, NULL, NULL, NULL },
-    {"%f",	1, "viewsize",		IMG_O(i_viewsize),	dimen_hook, NULL, NULL, NULL },
-    {"%f",	3, "eye_pt",		IMG_O(i_eye_pt),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	4, "orientation",	IMG_O(i_orient),	orient_hook, NULL, NULL, NULL },
-    {"%c",	1, "through",		IMG_O(i_through),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%c",	1, "antialias",		IMG_O(i_antialias),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%c",	1, "behind",		IMG_O(i_behind),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	1, "perspective",	IMG_O(i_perspective),	persp_hook, NULL, NULL, NULL },
-    {"",	0, (char *)0,		0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%V",	1, "image",		IMG_O(i_name),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%V",	1, "file",		IMG_O(i_name),		img_source_hook, NULL, NULL },
+    {"%V",	1, "obj",		IMG_O(i_name),		img_source_hook, NULL, NULL },
+    {"%V",	1, "object",		IMG_O(i_name),		img_source_hook, NULL, NULL },
+    {"%d",	1, "w",			IMG_O(i_width),		dimen_hook, NULL, NULL },
+    {"%d",	1, "n",			IMG_O(i_height),	dimen_hook, NULL, NULL },
+    {"%f",	1, "viewsize",		IMG_O(i_viewsize),	dimen_hook, NULL, NULL },
+    {"%f",	3, "eye_pt",		IMG_O(i_eye_pt),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	4, "orientation",	IMG_O(i_orient),	orient_hook, NULL, NULL },
+    {"%c",	1, "through",		IMG_O(i_through),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%c",	1, "antialias",		IMG_O(i_antialias),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%c",	1, "behind",		IMG_O(i_behind),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	1, "perspective",	IMG_O(i_perspective),	persp_hook, NULL, NULL },
+    {"",	0, (char *)0,		0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 struct bu_structparse img_print_tab[] = {
-    {"%p", 1, "img_parse_tab", bu_byteoffset(img_parse_tab[0]), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	4, "i_plane",		IMG_O(i_plane),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",	0, (char *)0,		0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%p", 1, "img_parse_tab", bu_byteoffset(img_parse_tab[0]), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	4, "i_plane",		IMG_O(i_plane),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",	0, (char *)0,		0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

@@ -834,10 +834,10 @@ ps_getBoundFlag(struct dm *dmp)
 
 #define ps_MV_O(_m) offsetof(struct ps_mvars, _m)
 struct bu_structparse ps_vparse[] = {
-    {"%g",  1, "bound",         ps_MV_O(bound),         dm_generic_hook, NULL, NULL, NULL},
-    {"%d",  1, "useBound",      ps_MV_O(boundFlag),     dm_generic_hook, NULL, NULL, NULL},
-    {"%d",  1, "zclip",         ps_MV_O(zclip),         dm_generic_hook, NULL, NULL, NULL},
-    {"",    0, (char *)0,       0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%g",  1, "bound",         ps_MV_O(bound),         dm_generic_hook, NULL, NULL},
+    {"%d",  1, "useBound",      ps_MV_O(boundFlag),     dm_generic_hook, NULL, NULL},
+    {"%d",  1, "zclip",         ps_MV_O(zclip),         dm_generic_hook, NULL, NULL},
+    {"",    0, (char *)0,       0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL}
 };
 
 struct dm_impl dm_ps_impl = {

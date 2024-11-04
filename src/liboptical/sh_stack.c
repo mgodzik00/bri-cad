@@ -55,7 +55,7 @@ struct stk_specific {
 #define STK_O(m) bu_offsetof(struct stk_specific, m)
 
 struct bu_structparse stk_parse[] = {
-    {"", 0, (char *)0, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"", 0, (char *)0, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

@@ -1125,18 +1125,18 @@ ogl_geometry_request(struct dm *dmp, int width, int height)
 #define GLXVARS_MV_O(_m) offsetof(struct dm_glxvars, _m)
 
 struct bu_structparse dm_glxvars_vparse[] = {
-    {"%x",      1,      "dpy",                  GLXVARS_MV_O(dpy),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "win",                  GLXVARS_MV_O(win),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "top",                  GLXVARS_MV_O(top),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "tkwin",                GLXVARS_MV_O(xtkwin),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "depth",                GLXVARS_MV_O(depth),      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "cmap",                 GLXVARS_MV_O(cmap),       BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "vip",                  GLXVARS_MV_O(vip),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%x",      1,      "fontstruct",           GLXVARS_MV_O(fontstruct), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devmotionnotify",      GLXVARS_MV_O(devmotionnotify),    BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devbuttonpress",       GLXVARS_MV_O(devbuttonpress),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",      1,      "devbuttonrelease",     GLXVARS_MV_O(devbuttonrelease),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",        0,      (char *)0,              0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%x",      1,      "dpy",                  GLXVARS_MV_O(dpy),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "win",                  GLXVARS_MV_O(win),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "top",                  GLXVARS_MV_O(top),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "tkwin",                GLXVARS_MV_O(xtkwin),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "depth",                GLXVARS_MV_O(depth),      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "cmap",                 GLXVARS_MV_O(cmap),       BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "vip",                  GLXVARS_MV_O(vip),        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%x",      1,      "fontstruct",           GLXVARS_MV_O(fontstruct), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devmotionnotify",      GLXVARS_MV_O(devmotionnotify),    BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devbuttonpress",       GLXVARS_MV_O(devbuttonpress),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",      1,      "devbuttonrelease",     GLXVARS_MV_O(devbuttonrelease),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",        0,      (char *)0,              0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 int

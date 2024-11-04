@@ -73,8 +73,8 @@ static long line_num;			/* count of lines output to shotline file */
 
 /* Viewing module specific "set" variables */
 struct bu_structparse view_parse[] = {
-    {"%V",	1, "ray_data_file",		bu_byteoffset(ray_data_file),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",	0, (char *)0,	0,		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%V",	1, "ray_data_file",		bu_byteoffset(ray_data_file),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

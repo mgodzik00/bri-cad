@@ -67,52 +67,52 @@ struct mfuncs light_mfuncs[] = {
 
 /** for printing out light values */
 struct bu_structparse light_print_tab[] = {
-    {"%f",	1, "bright",	LIGHT_O(lt_intensity),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	1, "angle",	LIGHT_O(lt_angle),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	1, "fract",	LIGHT_O(lt_fraction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	3, "target",	LIGHT_O(lt_target),	aim_set, NULL, NULL, NULL },
-    {"%d",	1, "shadows",	LIGHT_O(lt_shadows),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",	1, "infinite",	LIGHT_O(lt_infinite),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",	1, "visible",	LIGHT_O(lt_visible),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",	1, "invisible",	LIGHT_O(lt_invisible),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"%f",	1, "bright",	LIGHT_O(lt_intensity),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	1, "angle",	LIGHT_O(lt_angle),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	1, "fract",	LIGHT_O(lt_fraction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	3, "target",	LIGHT_O(lt_target),	aim_set, NULL, NULL },
+    {"%d",	1, "shadows",	LIGHT_O(lt_shadows),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",	1, "infinite",	LIGHT_O(lt_infinite),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",	1, "visible",	LIGHT_O(lt_visible),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",	1, "invisible",	LIGHT_O(lt_invisible),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 
 /** for actually parsing light values */
 struct bu_structparse light_parse[] = {
 
-    {"%f",	1, "bright",	LIGHT_O(lt_intensity),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	1, "b",		LIGHT_O(lt_intensity),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	1, "inten",	LIGHT_O(lt_intensity),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f",	1, "bright",	LIGHT_O(lt_intensity),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	1, "b",		LIGHT_O(lt_intensity),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	1, "inten",	LIGHT_O(lt_intensity),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
 
-    {"%f",	1, "angle",	LIGHT_O(lt_angle),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	1, "a",		LIGHT_O(lt_angle),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f",	1, "angle",	LIGHT_O(lt_angle),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	1, "a",		LIGHT_O(lt_angle),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
 
-    {"%f",	1, "fract",	LIGHT_O(lt_fraction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%f",	1, "f",		LIGHT_O(lt_fraction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f",	1, "fract",	LIGHT_O(lt_fraction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%f",	1, "f",		LIGHT_O(lt_fraction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
 
-    {"%f",	3, "target",	LIGHT_O(lt_target),	aim_set, NULL, NULL, NULL },
-    {"%f",	3, "t",		LIGHT_O(lt_target),	aim_set, NULL, NULL, NULL },
-    {"%f",	3, "aim",	LIGHT_O(lt_target),	aim_set, NULL, NULL, NULL },
-    {"%f",	3, "d",		LIGHT_O(lt_target),	aim_set, NULL, NULL, NULL },
-    {"%f",	3, "dir",	LIGHT_O(lt_target),	aim_set, NULL, NULL, NULL },
+    {"%f",	3, "target",	LIGHT_O(lt_target),	aim_set, NULL, NULL },
+    {"%f",	3, "t",		LIGHT_O(lt_target),	aim_set, NULL, NULL },
+    {"%f",	3, "aim",	LIGHT_O(lt_target),	aim_set, NULL, NULL },
+    {"%f",	3, "d",		LIGHT_O(lt_target),	aim_set, NULL, NULL },
+    {"%f",	3, "dir",	LIGHT_O(lt_target),	aim_set, NULL, NULL },
 
-    {"%d",	1, "shadows",	LIGHT_O(lt_shadows),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",	1, "s",		LIGHT_O(lt_shadows),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "shadows",	LIGHT_O(lt_shadows),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",	1, "s",		LIGHT_O(lt_shadows),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
 
-    {"%d",	1, "infinite",	LIGHT_O(lt_infinite),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
-    {"%d",	1, "i",		LIGHT_O(lt_infinite),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "infinite",	LIGHT_O(lt_infinite),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
+    {"%d",	1, "i",		LIGHT_O(lt_infinite),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
 
-    {"%d",	1, "visible",	LIGHT_O(lt_visible),	light_cvt_visible, NULL, NULL, NULL },
-    {"%d",	1, "v",		LIGHT_O(lt_visible),	light_cvt_visible, NULL, NULL, NULL },
+    {"%d",	1, "visible",	LIGHT_O(lt_visible),	light_cvt_visible, NULL, NULL },
+    {"%d",	1, "v",		LIGHT_O(lt_visible),	light_cvt_visible, NULL, NULL },
 
-    {"%d",	1, "invisible",	LIGHT_O(lt_invisible),	light_cvt_visible, NULL, NULL, NULL },
+    {"%d",	1, "invisible",	LIGHT_O(lt_invisible),	light_cvt_visible, NULL, NULL },
 
-    {"%f",	3, "pt",	LIGHT_O(lt_parse_pt), light_pt_set, NULL, NULL, NULL },
-    {"%f",	6, "pn",	LIGHT_O(lt_parse_pt), light_pt_set, NULL, NULL, NULL },
+    {"%f",	3, "pt",	LIGHT_O(lt_parse_pt), light_pt_set, NULL, NULL },
+    {"%f",	6, "pn",	LIGHT_O(lt_parse_pt), light_pt_set, NULL, NULL },
 
-    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 

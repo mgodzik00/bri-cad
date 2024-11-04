@@ -79,7 +79,7 @@ struct osl_specific osl_defaults = {
 
 /* description of how to parse/print the arguments to the shader */
 struct bu_structparse osl_print_tab[] = {
-    {"", 0, (char *)0, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
+    {"", 0, (char *)0, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
 };
 
 extern "C" {
