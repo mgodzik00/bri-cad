@@ -533,7 +533,7 @@ mged_setup(Tcl_Interp **interpreter)
 
     history_setup();
     mged_global_variable_setup(*interpreter);
-    mged_variable_setup(s, *interpreter);
+    mged_variable_setup(*interpreter);
     s->GEDP->cmd_interp = (void *)*interpreter;
 
     /* Tcl needs to write nulls onto subscripted variable names */

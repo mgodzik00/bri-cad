@@ -361,8 +361,12 @@ bv_zoomout(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED
 
 
 int
-bv_rate_toggle(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_rate_toggle(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     mged_variables->mv_rateknobs = !mged_variables->mv_rateknobs;
 
     {
@@ -371,7 +375,7 @@ bv_rate_toggle(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UN
 	const char name[] = "name";
 	void *base = 0;
 	const char value[] = "value";
-	set_scroll_private(sdp, name, base, value, NULL);
+	set_scroll_private(sdp, name, base, value, s);
     }
 
     return TCL_OK;

@@ -108,8 +108,8 @@ mged_dm_init(
 
 #ifdef HAVE_TK
     if (dm_graphical(DMP) && !BU_STR_EQUAL(dm_get_dm_name(DMP), "swrast")) {
-	Tk_DeleteGenericHandler(doEvent, (ClientData)NULL);
-	Tk_CreateGenericHandler(doEvent, (ClientData)NULL);
+	Tk_DeleteGenericHandler(doEvent, (ClientData)s);
+	Tk_CreateGenericHandler(doEvent, (ClientData)s);
     }
 #endif
     (void)dm_configure_win(DMP, 0);
@@ -200,7 +200,7 @@ release(struct mged_state *s, char *name, int need_close)
 	if (mged_variables->mv_listen) {
 	    /* drop all clients */
 	    mged_variables->mv_listen = 0;
-	    fbserv_set_port(s, NULL, NULL, NULL, NULL, NULL);
+	    fbserv_set_port(NULL, NULL, NULL, NULL, s);
 	}
 
 	/* release framebuffer resources */
@@ -328,7 +328,7 @@ f_attach(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *a
 
 
 int
-gui_setup(const char *dstr)
+gui_setup(struct mged_state *s, const char *dstr)
 {
 #ifdef HAVE_TK
     Tk_GenericProc *handler = doEvent;
@@ -393,7 +393,7 @@ gui_setup(const char *dstr)
     }
 
     /* create the event handler */
-    Tk_CreateGenericHandler(handler, (ClientData)NULL);
+    Tk_CreateGenericHandler(handler, (ClientData)s);
 
     Tcl_Eval(INTERP, "wm withdraw .");
     Tcl_Eval(INTERP, "tk appname mged");
@@ -436,14 +436,14 @@ mged_attach(struct mged_state *s, const char *wp_name, int argc, const char *arg
 
 	struct bu_vls *dname = dm_get_dname(tmp_dmp);
 	if (dname && bu_vls_strlen(dname)) {
-	    if (gui_setup(bu_vls_cstr(dname)) == TCL_ERROR) {
+	    if (gui_setup(s, bu_vls_cstr(dname)) == TCL_ERROR) {
 		bu_free((void *)mged_curr_dm, "f_attach: dm_list");
 		set_curr_dm(s, o_dm);
 		bu_vls_free(&tmp_vls);
 		dm_close(tmp_dmp);
 		return TCL_ERROR;
 	    }
-	} else if (gui_setup((char *)NULL) == TCL_ERROR) {
+	} else if (gui_setup(s, (char *)NULL) == TCL_ERROR) {
 	    bu_free((void *)mged_curr_dm, "f_attach: dm_list");
 	    set_curr_dm(s, o_dm);
 	    bu_vls_free(&tmp_vls);

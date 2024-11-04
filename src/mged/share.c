@@ -283,25 +283,29 @@ f_share(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *ar
  *	rset c bg 0 0 50	--->	sets the background color to dark blue
  */
 int
-f_rset (ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
+f_rset (ClientData clientData, Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     struct bu_vls vls = BU_VLS_INIT_ZERO;
 
     /* print values for all resources */
     if (argc == 1) {
-	mged_vls_struct_parse(&vls, "Axes, res_type - ax", axes_vparse,
+	mged_vls_struct_parse(s, &vls, "Axes, res_type - ax", axes_vparse,
 			      (const char *)axes_state, argc, argv);
 	bu_vls_printf(&vls, "\n");
-	mged_vls_struct_parse(&vls, "Color Schemes, res_type - c", color_scheme_vparse,
+	mged_vls_struct_parse(s, &vls, "Color Schemes, res_type - c", color_scheme_vparse,
 			      (const char *)color_scheme, argc, argv);
 	bu_vls_printf(&vls, "\n");
-	mged_vls_struct_parse(&vls, "Grid, res_type - g", grid_vparse,
+	mged_vls_struct_parse(s, &vls, "Grid, res_type - g", grid_vparse,
 			      (const char *)grid_state, argc, argv);
 	bu_vls_printf(&vls, "\n");
-	mged_vls_struct_parse(&vls, "Rubber Band, res_type - r", rubber_band_vparse,
+	mged_vls_struct_parse(s, &vls, "Rubber Band, res_type - r", rubber_band_vparse,
 			      (const char *)rubber_band, argc, argv);
 	bu_vls_printf(&vls, "\n");
-	mged_vls_struct_parse(&vls, "MGED Variables, res_type - var", mged_vparse,
+	mged_vls_struct_parse(s, &vls, "MGED Variables, res_type - var", mged_vparse,
 			      (const char *)mged_variables, argc, argv);
 
 	Tcl_AppendResult(interpreter, bu_vls_addr(&vls), (char *)NULL);
@@ -316,7 +320,7 @@ f_rset (ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const 
 	    if (argv[1][1] == 'd' || argv[1][1] == 'D')
 		bu_vls_printf(&vls, "rset: use the adc command for the 'adc' resource");
 	    else if (argv[1][1] == 'x' || argv[1][1] == 'X')
-		mged_vls_struct_parse(&vls, "Axes", axes_vparse,
+		mged_vls_struct_parse(s, &vls, "Axes", axes_vparse,
 				      (const char *)axes_state, argc-1, argv+1);
 	    else {
 		bu_vls_printf(&vls, "rset: resource type '%s' unknown\n", argv[1]);
@@ -328,24 +332,24 @@ f_rset (ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const 
 	    break;
 	case 'c':
 	case 'C':
-	    mged_vls_struct_parse(&vls, "Color Schemes", color_scheme_vparse,
+	    mged_vls_struct_parse(s, &vls, "Color Schemes", color_scheme_vparse,
 				  (const char *)color_scheme, argc-1, argv+1);
 	    break;
 	case 'g':
 	case 'G':
-	    mged_vls_struct_parse(&vls, "Grid", grid_vparse,
+	    mged_vls_struct_parse(s, &vls, "Grid", grid_vparse,
 				  (const char *)grid_state, argc-1, argv+1);
 	    break;
 	case 'r':
 	case 'R':
-	    mged_vls_struct_parse(&vls, "Rubber Band", rubber_band_vparse,
+	    mged_vls_struct_parse(s, &vls, "Rubber Band", rubber_band_vparse,
 				  (const char *)rubber_band, argc-1, argv+1);
 	    break;
 	case 'v':
 	case 'V':
 	    if ((argv[1][1] == 'a' || argv[1][1] == 'A') &&
 		(argv[1][2] == 'r' || argv[1][2] == 'R'))
-		mged_vls_struct_parse(&vls, "mged variables", mged_vparse,
+		mged_vls_struct_parse(s, &vls, "mged variables", mged_vparse,
 				      (const char *)mged_variables, argc-1, argv+1);
 	    else if (argv[1][1] == 'i' || argv[1][1] == 'I')
 		bu_vls_printf(&vls, "rset: no support available for the 'view' resource");

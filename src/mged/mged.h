@@ -466,7 +466,7 @@ int is_dm_null(void);
 int mged_attach(struct mged_state *s, const char *wp_name, int argc, const char *argv[]);
 void mged_link_vars(struct mged_dm *p);
 void mged_slider_free_vls(struct mged_dm *p);
-int gui_setup(const char *dstr);
+int gui_setup(struct mged_state *s, const char *dstr);
 
 
 /* buttons.c */
@@ -664,7 +664,7 @@ int epain(struct rt_db_internal *ip, fastf_t thick[2]);
 int etoin(struct rt_db_internal *ip, fastf_t thick[1]);
 
 /* set.c */
-extern void fbserv_set_port(struct mged_state *s, const struct bu_structparse *, const char *, void *, const char *, void *);
+extern void fbserv_set_port(const struct bu_structparse *, const char *, void *, const char *, void *);
 extern void set_scroll_private(const struct bu_structparse *, const char *, void *, const char *, void *);
 extern void mged_variable_setup(Tcl_Interp *interpreter);
 
@@ -687,8 +687,8 @@ struct wdb_pipe_pnt *pipe_del_pnt(struct wdb_pipe_pnt *);
 void pipe_move_pnt(struct rt_pipe_internal *, struct wdb_pipe_pnt *, const point_t);
 
 /* vparse.c */
-extern void mged_vls_struct_parse(struct bu_vls *vls, const char *title, struct bu_structparse *how_to_parse, const char *structp, int argc, const char *argv[]); /* defined in vparse.c */
-extern void mged_vls_struct_parse_old(struct bu_vls *vls, const char *title, struct bu_structparse *how_to_parse, char *structp, int argc, const char *argv[]);
+extern void mged_vls_struct_parse(struct mged_state *s, struct bu_vls *vls, const char *title, struct bu_structparse *how_to_parse, const char *structp, int argc, const char *argv[]); /* defined in vparse.c */
+extern void mged_vls_struct_parse_old(struct mged_state *s, struct bu_vls *vls, const char *title, struct bu_structparse *how_to_parse, char *structp, int argc, const char *argv[]);
 
 /* rtif.c */
 int build_tops(char **start, char **end);

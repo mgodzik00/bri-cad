@@ -115,9 +115,7 @@ static int button0 = 0;
 int
 doEvent(ClientData clientData, XEvent *eventPtr)
 {
-    struct cmdtab *ctp = (struct cmdtab *)clientData;
-    MGED_CK_CMD(ctp);
-    struct mged_state *s = ctp->s;
+    struct mged_state *s = (struct mged_state *)clientData;
     struct mged_dm *save_dm_list;
     int status;
 

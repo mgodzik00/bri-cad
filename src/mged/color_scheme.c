@@ -260,8 +260,6 @@ cs_update(const struct bu_structparse *sdp,
 	  const char *value,
 	  void *data)
 {
-    struct cmdtab *ctp = (struct cmdtab *)data;
-    MGED_CK_CMD(ctp);
     struct bu_structparse *sp;
     struct bu_vls vls = BU_VLS_INIT_ZERO;
     int offset;

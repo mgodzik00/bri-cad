@@ -253,7 +253,7 @@ fbserv_new_client_handler(ClientData clientData,
 
 
 void
-fbserv_set_port(const struct bu_structparse *UNUSED(sp), const char *UNUSED(c1), void *UNUSED(v1), const char *UNUSED(c2), void *UNUSED(v2))
+fbserv_set_port(const struct bu_structparse *UNUSED(sp), const char *UNUSED(c1), void *UNUSED(v1), const char *UNUSED(c2), void *v2)
 {
     int i;
     int save_port;
@@ -440,7 +440,7 @@ fbserv_new_client_handler(ClientData clientData, int UNUSED(mask))
 
 
 void
-fbserv_set_port(struct mged_state *s, const struct bu_structparse *UNUSED(sp), const char *UNUSED(c1), void *UNUSED(v1), const char *UNUSED(c2), void *UNUSED(v2))
+fbserv_set_port(const struct bu_structparse *UNUSED(sp), const char *UNUSED(c1), void *UNUSED(v1), const char *UNUSED(c2), void *v2)
 {
     int i;
     int save_port;
@@ -499,7 +499,7 @@ fbserv_set_port(struct mged_state *s, const struct bu_structparse *UNUSED(sp), c
 	struct c_data *ncdata;
 	BU_GET(ncdata, struct c_data);
 	ncdata->fd = netfd;
-	ncdata->s = s;
+	ncdata->s = (struct mged_state *)v2;
 	Tcl_CreateFileHandler(netfd, TCL_READABLE,
 			      fbserv_new_client_handler, (ClientData)ncdata);
     }

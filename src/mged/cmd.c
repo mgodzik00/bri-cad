@@ -856,8 +856,12 @@ cmd_ged_dm_wrapper(ClientData clientData, Tcl_Interp *interpreter, int argc, con
  * Usage:  loadtk [displayname[.screennum]]
  */
 int
-cmd_tk(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const char *argv[])
+cmd_tk(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     int status;
 
     if (argc < 1 || 2 < argc) {
@@ -870,9 +874,9 @@ cmd_tk(ClientData UNUSED(clientData), Tcl_Interp *interpreter, int argc, const c
     }
 
     if (argc == 1)
-	status = gui_setup((char *)NULL);
+	status = gui_setup(s, (char *)NULL);
     else
-	status = gui_setup(argv[1]);
+	status = gui_setup(s, argv[1]);
 
     return status;
 }
