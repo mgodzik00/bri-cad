@@ -474,14 +474,15 @@ mged_setup(Tcl_Interp **interpreter)
 
     BU_GET(MGED_STATE, struct mged_state);
     struct mged_state *s = MGED_STATE;
-    s->interp = interpreter;
-    mged_global_db_ctx->s = s;
+    s->interp = *interpreter;
+    mged_global_db_ctx.s = s;
 
     BU_GET(s->GEDP, struct ged);
     GED_INIT(s->GEDP, NULL);
     s->GEDP->ged_output_handler = mged_output_handler;
-    s->GEDP->ged_refresh_client_data = (void *)s;
+    s->GEDP->ged_refresh_clientdata = (void *)s;
     s->GEDP->ged_refresh_handler = mged_refresh_handler;
+    s->GEDP->vlist_ctx = (void *)s;
     s->GEDP->ged_create_vlist_scene_obj_callback = createDListSolid;
     s->GEDP->ged_create_vlist_display_list_callback = createDListAll;
     s->GEDP->ged_destroy_vlist_callback = freeDListsAll;
@@ -494,7 +495,7 @@ mged_setup(Tcl_Interp **interpreter)
     s->GEDP->ged_db_callback_udata = &mged_global_db_ctx;
     s->GEDP->cmd_interp = (void *)interpreter;
     s->GEDP->search_ctx = (void *)s;
-    s->GEDP->ged_interp_eval = &mged_db_search_callback;
+    s->GEDP->ged_search_eval = &mged_db_search_callback;
     struct tclcad_io_data *t_iod = tclcad_create_io_data();
     t_iod->io_mode = TCL_READABLE;
     t_iod->interp = *interpreter;
@@ -521,10 +522,10 @@ mged_setup(Tcl_Interp **interpreter)
     view_state->vs_gvp->gv_clientData = (void *)view_state;
     MAT_DELTAS_GET_NEG(view_state->vs_orig_pos, view_state->vs_gvp->gv_center);
 
-    view_state->vs_gvp->vset = &GEDP->ged_views;
+    view_state->vs_gvp->vset = &s->GEDP->ged_views;
 
-    bv_set_add_view(&GEDP->ged_views, view_state->vs_gvp);
-    bu_ptbl_ins(&GEDP->ged_free_views, (long *)view_state->vs_gvp);
+    bv_set_add_view(&s->GEDP->ged_views, view_state->vs_gvp);
+    bu_ptbl_ins(&s->GEDP->ged_free_views, (long *)view_state->vs_gvp);
     s->GEDP->ged_gvp = view_state->vs_gvp;
 
     /* register commands */
@@ -532,9 +533,8 @@ mged_setup(Tcl_Interp **interpreter)
 
     history_setup();
     mged_global_variable_setup(*interpreter);
-    mged_variable_setup(*interpreter);
-    GEDP->ged_interp = (void *)*interpreter;
-    GEDP->ged_interp_eval = &mged_db_search_callback;
+    mged_variable_setup(s, *interpreter);
+    s->GEDP->cmd_interp = (void *)*interpreter;
 
     /* Tcl needs to write nulls onto subscripted variable names */
     bu_vls_printf(&str, "%s(state)", MGED_DISPLAY_VAR);
