@@ -35,20 +35,24 @@
 
 /* Usage:  overlay file.plot3 [name] */
 int
-cmd_overlay(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const char *argv[])
+cmd_overlay(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     int ret;
     Tcl_DString ds;
 
-    if (GEDP == GED_NULL)
+    if (s->GEDP == GED_NULL)
 	return TCL_OK;
 
     Tcl_DStringInit(&ds);
 
-    if (GEDP->ged_gvp)
-	GEDP->ged_gvp->dmp = (void *)mged_curr_dm->dm_dmp;
-    ret = ged_exec(GEDP, argc, argv);
-    Tcl_DStringAppend(&ds, bu_vls_addr(GEDP->ged_result_str), -1);
+    if (s->GEDP->ged_gvp)
+	s->GEDP->ged_gvp->dmp = (void *)mged_curr_dm->dm_dmp;
+    ret = ged_exec(s->GEDP, argc, argv);
+    Tcl_DStringAppend(&ds, bu_vls_addr(s->GEDP->ged_result_str), -1);
     Tcl_DStringResult(interp, &ds);
 
     if (ret & GED_HELP)
@@ -66,8 +70,12 @@ cmd_overlay(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const c
 
 /* Usage:  labelvert solid(s) */
 int
-f_labelvert(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const char *argv[])
+f_labelvert(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     struct display_list *gdlp;
     struct display_list *next_gdlp;
     int i;
@@ -93,20 +101,20 @@ f_labelvert(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const c
     scale = view_state->vs_gvp->gv_size / 100;		/* divide by # chars/screen */
 
     for (i=1; i<argc; i++) {
-	struct bv_scene_obj *s;
+	struct bv_scene_obj *so;
 	if ((dp = db_lookup(DBIP, argv[i], LOOKUP_NOISY)) == RT_DIR_NULL)
 	    continue;
 	/* Find uses of this solid in the solid table */
-	gdlp = BU_LIST_NEXT(display_list, GEDP->ged_gdp->gd_headDisplay);
-	while (BU_LIST_NOT_HEAD(gdlp, GEDP->ged_gdp->gd_headDisplay)) {
+	gdlp = BU_LIST_NEXT(display_list, s->GEDP->ged_gdp->gd_headDisplay);
+	while (BU_LIST_NOT_HEAD(gdlp, s->GEDP->ged_gdp->gd_headDisplay)) {
 	    next_gdlp = BU_LIST_PNEXT(display_list, gdlp);
 
-	    for (BU_LIST_FOR(s, bv_scene_obj, &gdlp->dl_head_scene_obj)) {
-		if (!s->s_u_data)
+	    for (BU_LIST_FOR(so, bv_scene_obj, &gdlp->dl_head_scene_obj)) {
+		if (!so->s_u_data)
 		    continue;
-		struct ged_bv_data *bdata = (struct ged_bv_data *)s->s_u_data;
+		struct ged_bv_data *bdata = (struct ged_bv_data *)so->s_u_data;
 		if (db_full_path_search(&bdata->s_fullpath, dp)) {
-		    rt_label_vlist_verts(vbp, &s->s_vlist, mat, scale, base2local);
+		    rt_label_vlist_verts(vbp, &so->s_vlist, mat, scale, base2local);
 		}
 	    }
 
@@ -114,7 +122,7 @@ f_labelvert(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const c
 	}
     }
 
-    cvt_vlblock_to_solids(vbp, "_LABELVERT_", 0);
+    cvt_vlblock_to_solids(s, vbp, "_LABELVERT_", 0);
 
     bv_vlblock_free(vbp);
     update_views = 1;
@@ -179,8 +187,12 @@ void get_face_list( const struct model* m, struct bu_list* f_list )
 
 /* Usage:  labelface solid(s) */
 int
-f_labelface(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const char *argv[])
+f_labelface(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     struct rt_db_internal internal;
     struct directory *dp;
     struct display_list *gdlp;
@@ -209,20 +221,20 @@ f_labelface(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const c
     /* attempt to resolve and verify */
     name = argv[1];
 
-    if ( (dp=db_lookup(GEDP->dbip, name, LOOKUP_QUIET))
+    if ( (dp=db_lookup(s->GEDP->dbip, name, LOOKUP_QUIET))
         == RT_DIR_NULL ) {
-        bu_vls_printf(GEDP->ged_result_str, "%s does not exist\n", name);
+        bu_vls_printf(s->GEDP->ged_result_str, "%s does not exist\n", name);
         return BRLCAD_ERROR;
     }
 
-    if (rt_db_get_internal(&internal, dp, GEDP->dbip,
+    if (rt_db_get_internal(&internal, dp, s->GEDP->dbip,
         bn_mat_identity, &rt_uniresource) < 0) {
-        bu_vls_printf(GEDP->ged_result_str, "rt_db_get_internal() error\n");
+        bu_vls_printf(s->GEDP->ged_result_str, "rt_db_get_internal() error\n");
         return BRLCAD_ERROR;
     }
 
     if (internal.idb_type != ID_NMG) {
-        bu_vls_printf(GEDP->ged_result_str, "%s is not an NMG solid\n", name);
+        bu_vls_printf(s->GEDP->ged_result_str, "%s is not an NMG solid\n", name);
         rt_db_free_internal(&internal);
         return BRLCAD_ERROR;
     }
@@ -236,18 +248,18 @@ f_labelface(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const c
     scale = view_state->vs_gvp->gv_size / 100;      /* divide by # chars/screen */
 
     for (i=1; i<argc; i++) {
-        struct bv_scene_obj *s;
+        struct bv_scene_obj *so;
         if ((dp = db_lookup(DBIP, argv[i], LOOKUP_NOISY)) == RT_DIR_NULL)
             continue;
 
         /* Find uses of this solid in the solid table */
-        gdlp = BU_LIST_NEXT(display_list, GEDP->ged_gdp->gd_headDisplay);
-        while (BU_LIST_NOT_HEAD(gdlp, GEDP->ged_gdp->gd_headDisplay)) {
+        gdlp = BU_LIST_NEXT(display_list, s->GEDP->ged_gdp->gd_headDisplay);
+        while (BU_LIST_NOT_HEAD(gdlp, s->GEDP->ged_gdp->gd_headDisplay)) {
             next_gdlp = BU_LIST_PNEXT(display_list, gdlp);
-            for (BU_LIST_FOR(s, bv_scene_obj, &gdlp->dl_head_scene_obj)) {
-		if (!s->s_u_data)
+            for (BU_LIST_FOR(so, bv_scene_obj, &gdlp->dl_head_scene_obj)) {
+		if (!so->s_u_data)
 		    continue;
-		struct ged_bv_data *bdata = (struct ged_bv_data *)s->s_u_data;
+		struct ged_bv_data *bdata = (struct ged_bv_data *)so->s_u_data;
                 if (db_full_path_search(&bdata->s_fullpath, dp)) {
                     get_face_list(m, &f_list);
                     rt_label_vlist_faces(vbp, &f_list, mat, scale, base2local);
@@ -258,7 +270,7 @@ f_labelface(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const c
         }
     }
 
-    cvt_vlblock_to_solids(vbp, "_LABELFACE_", 0);
+    cvt_vlblock_to_solids(s, vbp, "_LABELFACE_", 0);
 
     bv_vlblock_free(vbp);
     update_views = 1;
