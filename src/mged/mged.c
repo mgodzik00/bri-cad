@@ -134,6 +134,7 @@ static int stdfd[2] = {1, 2};
 struct stdio_data {
     long fd;
     Tcl_Channel chan;
+    struct mged_state *s;
 };
 
 struct mged_state *MGED_STATE = NULL;
@@ -1574,6 +1575,7 @@ main(int argc, char *argv[])
     if (classic_mged || !interactive) {
 	struct stdio_data *sd;
 	BU_GET(sd, struct stdio_data);
+	sd->s = MGED_STATE;
 
 #if !defined(_WIN32) || defined(__CYGWIN__)
 	sd->fd = STDIN_FILENO;
@@ -1743,6 +1745,7 @@ stdin_input(ClientData clientData, int UNUSED(mask))
     char ch;
     struct bu_vls temp = BU_VLS_INIT_ZERO;
     struct stdio_data *sd = (struct stdio_data *)clientData;
+    struct mged_state *s = sd->s;
 
     /* When not in cbreak mode, just process an entire line of input,
      * and don't do any command-line manipulation.
