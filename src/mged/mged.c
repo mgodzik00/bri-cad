@@ -1404,7 +1404,8 @@ main(int argc, char *argv[])
 	     * and always create a new db if one does not exist since we want
 	     * to allow mged to process args after the db as a command
 	     */
-	    if (f_opendb((ClientData)NULL, INTERP, 2, av) == TCL_ERROR) {
+	    struct cmdtab ec = {MGED_CMD_MAGIC, NULL, NULL, NULL, s};
+	    if (f_opendb(&ec, INTERP, 2, av) == TCL_ERROR) {
 		if (!run_in_foreground && use_pipe) {
 		    notify_parent_done(parent_pipe[1]);
 		}
