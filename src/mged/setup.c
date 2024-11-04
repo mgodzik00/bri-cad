@@ -480,6 +480,7 @@ mged_setup(Tcl_Interp **interpreter)
     BU_GET(s->GEDP, struct ged);
     GED_INIT(s->GEDP, NULL);
     s->GEDP->ged_output_handler = mged_output_handler;
+    s->GEDP->ged_refresh_client_data = (void *)s;
     s->GEDP->ged_refresh_handler = mged_refresh_handler;
     s->GEDP->ged_create_vlist_scene_obj_callback = createDListSolid;
     s->GEDP->ged_create_vlist_display_list_callback = createDListAll;
