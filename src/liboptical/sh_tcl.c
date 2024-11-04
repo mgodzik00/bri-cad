@@ -77,14 +77,14 @@ struct tcl_specific tcl_defaults = {
  * structure above
  */
 struct bu_structparse tcl_print_tab[] = {
-    {"%V",  1, "file", SHDR_O(tcl_file),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",	0, (char *)0,	0,		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%V",  1, "file", SHDR_O(tcl_file),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 
 };
 struct bu_structparse tcl_parse_tab[] = {
-    {"%p", 1, "tcl_print_tab", bu_byteoffset(tcl_print_tab[0]), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%V", 1, "f", SHDR_O(tcl_file),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",	0, (char *)0,	0,	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%p", 1, "tcl_print_tab", bu_byteoffset(tcl_print_tab[0]), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%V", 1, "f", SHDR_O(tcl_file),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 

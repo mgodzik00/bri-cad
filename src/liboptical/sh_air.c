@@ -60,12 +60,12 @@ static struct air_specific air_defaults = {
 static void dpm_hook(const struct bu_structparse *, const char *name, void *, const char *, void *);
 
 struct bu_structparse air_parse[] = {
-    {"%g",  1, "dpm",		SHDR_O(d_p_mm),		dpm_hook, NULL, NULL },
-    {"%g",  1, "scale",		SHDR_O(scale),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g",  1, "s",		SHDR_O(scale),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g",  1, "delta",		SHDR_O(delta),		bu_mm_cvt, NULL, NULL },
-    {"%f",  1, "d",		SHDR_O(delta),		bu_mm_cvt, NULL, NULL },
-    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%g",  1, "dpm",		SHDR_O(d_p_mm),		dpm_hook, NULL, NULL, NULL },
+    {"%g",  1, "scale",		SHDR_O(scale),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g",  1, "s",		SHDR_O(scale),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g",  1, "delta",		SHDR_O(delta),		bu_mm_cvt, NULL, NULL, NULL },
+    {"%f",  1, "d",		SHDR_O(delta),		bu_mm_cvt, NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 

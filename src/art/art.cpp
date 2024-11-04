@@ -230,13 +230,13 @@ color_hook(const struct bu_structparse *sp, const char *name, void *UNUSED(base)
 // holds application specific parameters
 extern "C" {
     struct bu_structparse view_parse[] = {
-	{"%d", 1, "samples", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-	{"%d", 1, "s", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
+	{"%d", 1, "samples", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+	{"%d", 1, "s", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
 	{"%f", 3, "background", 0, color_hook, NULL, NULL},
 	{"%f", 3, "bg", 0, color_hook, NULL, NULL},
-	{"%d", 1, "light_intensity", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-	{"%d", 1, "li", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-	{"",	0, (char *)0,	0,	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+	{"%d", 1, "light_intensity", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+	{"%d", 1, "li", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+	{"",	0, (char *)0,	0,	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
     };
 }
 

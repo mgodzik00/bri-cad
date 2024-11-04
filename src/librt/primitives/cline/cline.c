@@ -55,11 +55,11 @@ struct cline_specific {
 #define RT_CLINE_O(m) bu_offsetof(struct rt_cline_internal, m)
 
 const struct bu_structparse rt_cline_parse[] = {
-    { "%f", 3, "V", RT_CLINE_O(v),  BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    { "%f", 3, "H", RT_CLINE_O(h),  BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    { "%f", 1, "r", RT_CLINE_O(radius), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    { "%f", 1, "t", RT_CLINE_O(thickness), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    { {'\0', '\0', '\0', '\0'}, 0, (char *)NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    { "%f", 3, "V", RT_CLINE_O(v),  BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    { "%f", 3, "H", RT_CLINE_O(h),  BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    { "%f", 1, "r", RT_CLINE_O(radius), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    { "%f", 1, "t", RT_CLINE_O(thickness), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    { {'\0', '\0', '\0', '\0'}, 0, (char *)NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 /**

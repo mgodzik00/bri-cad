@@ -62,19 +62,19 @@ static void txt_source_hook(const struct bu_structparse *, const char *, void *,
 
 
 struct bu_structparse txt_parse[] = {
-    {"%d",	1, "transp",	TX_O(tx_transp),	txt_transp_hook, NULL, NULL },
-    {"%V",	1, "file", TX_O(tx_name),		txt_source_hook, NULL, NULL },
-    {"%V",	1, "obj", TX_O(tx_name),		txt_source_hook, NULL, NULL },
-    {"%V",	1, "object", TX_O(tx_name),		txt_source_hook, NULL, NULL },
-    {"%V",	1, "texture", TX_O(tx_name),	        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",	1, "w",		TX_O(tx_w),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",	1, "n",		TX_O(tx_n),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",	1, "l",		TX_O(tx_n),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",	1, "trans_valid", TX_O(tx_trans_valid),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },/*compat*/
-    {"%d",	1, "t",		TX_O(tx_trans_valid),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%f",	2, "uv",	TX_O(tx_scale), 	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",	1, "m",		TX_O(tx_mirror),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%d",	1, "transp",	TX_O(tx_transp),	txt_transp_hook, NULL, NULL, NULL },
+    {"%V",	1, "file", TX_O(tx_name),		txt_source_hook, NULL, NULL, NULL },
+    {"%V",	1, "obj", TX_O(tx_name),		txt_source_hook, NULL, NULL, NULL },
+    {"%V",	1, "object", TX_O(tx_name),		txt_source_hook, NULL, NULL, NULL },
+    {"%V",	1, "texture", TX_O(tx_name),	        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "w",		TX_O(tx_w),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "n",		TX_O(tx_n),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "l",		TX_O(tx_n),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "trans_valid", TX_O(tx_trans_valid),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },/*compat*/
+    {"%d",	1, "t",		TX_O(tx_trans_valid),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f",	2, "uv",	TX_O(tx_scale), 	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "m",		TX_O(tx_mirror),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 
@@ -680,10 +680,10 @@ struct ckr_specific {
 #define CKR_O(m) bu_offsetof(struct ckr_specific, m)
 
 struct bu_structparse ckr_parse[] = {
-    {"%d",	3, "a",	CKR_O(ckr_a), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",	3, "b",	CKR_O(ckr_b), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g",	1, "s", CKR_O(ckr_scale), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%d",	3, "a",	CKR_O(ckr_a), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	3, "b",	CKR_O(ckr_b), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g",	1, "s", CKR_O(ckr_scale), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 

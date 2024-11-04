@@ -58,6 +58,11 @@ void set_absolute_model_tran(void);
 
 static int perspective_table[] = { 90, 30, 45, 60 };
 
+struct set_data {
+    struct bu_structparse *sp;
+    struct mged_state *s;
+};
+
 struct _mged_variables default_mged_variables = {
     /* mv_rc */			1,
     /* mv_autosize */		1,
@@ -97,39 +102,39 @@ struct _mged_variables default_mged_variables = {
 #define MV_O(_m) bu_offsetof(struct _mged_variables, _m)
 #define LINE RT_MAXLINE
 struct bu_structparse mged_vparse[] = {
-    {"%d", 1, "rc",			MV_O(mv_rc),			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d", 1, "autosize",		MV_O(mv_autosize),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d", 1, "rateknobs",		MV_O(mv_rateknobs),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d", 1, "sliders",		MV_O(mv_sliders),		set_scroll_private, NULL, NULL },
-    {"%d", 1, "faceplate",		MV_O(mv_faceplate),		set_dirty_flag, NULL, NULL },
-    {"%d", 1, "orig_gui",		MV_O(mv_orig_gui),	        set_dirty_flag, NULL, NULL },
-    {"%d", 1, "linewidth",		MV_O(mv_linewidth),		set_dirty_flag, NULL, NULL },
-    {"%c", 1, "linestyle",		MV_O(mv_linestyle),		set_dirty_flag, NULL, NULL },
-    {"%d", 1, "hot_key",		MV_O(mv_hot_key),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d", 1, "context",		MV_O(mv_context),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d", 1, "dlist",			MV_O(mv_dlist),			set_dlist, NULL, NULL },
-    {"%d", 1, "use_air",		MV_O(mv_use_air),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d", 1, "listen",			MV_O(mv_listen),		fbserv_set_port, NULL, NULL },
-    {"%d", 1, "port",			MV_O(mv_port),			fbserv_set_port, NULL, NULL },
-    {"%d", 1, "fb",			MV_O(mv_fb),			set_dirty_flag, NULL, NULL },
-    {"%d", 1, "fb_all",			MV_O(mv_fb_all),		set_dirty_flag, NULL, NULL },
-    {"%d", 1, "fb_overlay",		MV_O(mv_fb_overlay),		set_dirty_flag, NULL, NULL },
-    {"%c", 1, "mouse_behavior",		MV_O(mv_mouse_behavior),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%c", 1, "coords",			MV_O(mv_coords),		set_coords, NULL, NULL },
-    {"%c", 1, "rotate_about",		MV_O(mv_rotate_about),		set_rotate_about, NULL, NULL },
-    {"%c", 1, "transform",		MV_O(mv_transform),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d", 1, "predictor",		MV_O(mv_predictor),		predictor_hook, NULL, NULL },
-    {"%g", 1, "predictor_advance",	MV_O(mv_predictor_advance),	predictor_hook, NULL, NULL },
-    {"%g", 1, "predictor_length",	MV_O(mv_predictor_length),	predictor_hook, NULL, NULL },
-    {"%g", 1, "perspective",		MV_O(mv_perspective),		set_perspective, NULL, NULL },
-    {"%d", 1, "perspective_mode",	MV_O(mv_perspective_mode),	establish_perspective, NULL, NULL },
-    {"%d", 1, "toggle_perspective",	MV_O(mv_toggle_perspective),	toggle_perspective, NULL, NULL },
-    {"%g", 1, "nmg_eu_dist",		MV_O(mv_nmg_eu_dist),		nmg_eu_dist_set, NULL, NULL },
-    {"%g", 1, "eye_sep_dist",		MV_O(mv_eye_sep_dist),		set_dirty_flag, NULL, NULL },
-    {"%s", LINE, "union_op",		MV_O(mv_union_lexeme),	        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%s", LINE, "intersection_op",	MV_O(mv_intersection_lexeme),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%s", LINE, "difference_op",	MV_O(mv_difference_lexeme),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",   0, NULL,			0,				BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%d", 1, "rc",			MV_O(mv_rc),			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "autosize",		MV_O(mv_autosize),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "rateknobs",		MV_O(mv_rateknobs),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "sliders",		MV_O(mv_sliders),		set_scroll_private, NULL, NULL, NULL },
+    {"%d", 1, "faceplate",		MV_O(mv_faceplate),		set_dirty_flag, NULL, NULL, NULL },
+    {"%d", 1, "orig_gui",		MV_O(mv_orig_gui),	        set_dirty_flag, NULL, NULL, NULL },
+    {"%d", 1, "linewidth",		MV_O(mv_linewidth),		set_dirty_flag, NULL, NULL, NULL },
+    {"%c", 1, "linestyle",		MV_O(mv_linestyle),		set_dirty_flag, NULL, NULL, NULL },
+    {"%d", 1, "hot_key",		MV_O(mv_hot_key),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "context",		MV_O(mv_context),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "dlist",			MV_O(mv_dlist),			set_dlist, NULL, NULL, NULL },
+    {"%d", 1, "use_air",		MV_O(mv_use_air),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "listen",			MV_O(mv_listen),		fbserv_set_port, NULL, NULL, NULL },
+    {"%d", 1, "port",			MV_O(mv_port),			fbserv_set_port, NULL, NULL, NULL },
+    {"%d", 1, "fb",			MV_O(mv_fb),			set_dirty_flag, NULL, NULL, NULL },
+    {"%d", 1, "fb_all",			MV_O(mv_fb_all),		set_dirty_flag, NULL, NULL, NULL },
+    {"%d", 1, "fb_overlay",		MV_O(mv_fb_overlay),		set_dirty_flag, NULL, NULL, NULL },
+    {"%c", 1, "mouse_behavior",		MV_O(mv_mouse_behavior),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%c", 1, "coords",			MV_O(mv_coords),		set_coords, NULL, NULL, NULL },
+    {"%c", 1, "rotate_about",		MV_O(mv_rotate_about),		set_rotate_about, NULL, NULL, NULL },
+    {"%c", 1, "transform",		MV_O(mv_transform),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "predictor",		MV_O(mv_predictor),		predictor_hook, NULL, NULL, NULL },
+    {"%g", 1, "predictor_advance",	MV_O(mv_predictor_advance),	predictor_hook, NULL, NULL, NULL },
+    {"%g", 1, "predictor_length",	MV_O(mv_predictor_length),	predictor_hook, NULL, NULL, NULL },
+    {"%g", 1, "perspective",		MV_O(mv_perspective),		set_perspective, NULL, NULL, NULL },
+    {"%d", 1, "perspective_mode",	MV_O(mv_perspective_mode),	establish_perspective, NULL, NULL, NULL },
+    {"%d", 1, "toggle_perspective",	MV_O(mv_toggle_perspective),	toggle_perspective, NULL, NULL, NULL },
+    {"%g", 1, "nmg_eu_dist",		MV_O(mv_nmg_eu_dist),		nmg_eu_dist_set, NULL, NULL, NULL },
+    {"%g", 1, "eye_sep_dist",		MV_O(mv_eye_sep_dist),		set_dirty_flag, NULL, NULL, NULL },
+    {"%s", LINE, "union_op",		MV_O(mv_union_lexeme),	        BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%s", LINE, "intersection_op",	MV_O(mv_intersection_lexeme),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%s", LINE, "difference_op",	MV_O(mv_difference_lexeme),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",   0, NULL,			0,				BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 static void
@@ -264,11 +269,12 @@ unset_var(ClientData clientData, Tcl_Interp *interp, const char *name1, const ch
  **/
 
 void
-mged_variable_setup(Tcl_Interp *interp)
+mged_variable_setup(struct mged_state *s, Tcl_Interp *interp)
 {
     struct bu_structparse *sp;
 
     for (sp = &mged_vparse[0]; sp->sp_name != NULL; sp++) {
+	sp->sp_u_data = s;
 	read_var((ClientData)sp, interp, sp->sp_name, (char *)NULL, 0);
 	Tcl_TraceVar(interp, sp->sp_name, TCL_TRACE_READS|TCL_GLOBAL_ONLY,
 		     (Tcl_VarTraceProc *)read_var, (ClientData)sp);
@@ -303,12 +309,13 @@ f_set(ClientData UNUSED(clientData), Tcl_Interp *interp, int argc, const char *a
 
 
 void
-set_scroll_private(const struct bu_structparse *UNUSED(sdp),
+set_scroll_private(const struct bu_structparse *sdp,
 		   const char *UNUSED(name),
 		   void *UNUSED(base),
 		   const char *UNUSED(value),
 		   void *UNUSED(data))
 {
+    struct mged_state *s = (struct mged_state *)sdp->sp_u_data;
     struct mged_dm *save_m_dmp;
 
     save_m_dmp = mged_curr_dm;
@@ -316,7 +323,7 @@ set_scroll_private(const struct bu_structparse *UNUSED(sdp),
     for (size_t di = 0; di < BU_PTBL_LEN(&active_dm_set); di++) {
 	struct mged_dm *m_dmp = (struct mged_dm *)BU_PTBL_GET(&active_dm_set, di);
 	if (m_dmp->dm_mged_variables == save_m_dmp->dm_mged_variables) {
-	    set_curr_dm(m_dmp);
+	    set_curr_dm(s, m_dmp);
 
 	    if (mged_variables->mv_faceplate && mged_variables->mv_orig_gui) {
 		if (mged_variables->mv_sliders)	/* zero slider variables */
@@ -329,7 +336,7 @@ set_scroll_private(const struct bu_structparse *UNUSED(sdp),
 	}
     }
 
-    set_curr_dm(save_m_dmp);
+    set_curr_dm(s, save_m_dmp);
 }
 
 
@@ -370,12 +377,13 @@ set_absolute_model_tran(void)
 
 
 static void
-set_dlist(const struct bu_structparse *UNUSED(sdp),
+set_dlist(const struct bu_structparse *sdp,
 	  const char *UNUSED(name),
 	  void *UNUSED(base),
 	  const char *UNUSED(value),
 	  void *UNUSED(data))
 {
+    struct mged_state *s = (struct mged_state *)sdp->sp_u_data;
     struct mged_dm *save_dlp;
 
     /* save current display manager */
@@ -395,8 +403,8 @@ set_dlist(const struct bu_structparse *UNUSED(sdp),
 
 	    if (dm_get_displaylist(dlp1->dm_dmp) &&
 		dlp1->dm_dlist_state->dl_active == 0) {
-		set_curr_dm(dlp1);
-		createDLists(GEDP->ged_gdp->gd_headDisplay);
+		set_curr_dm(s, dlp1);
+		createDLists(s->GEDP->ged_gdp->gd_headDisplay);
 		dlp1->dm_dlist_state->dl_active = 1;
 		dlp1->dm_dirty = 1;
 		dm_set_dirty(dlp1->dm_dmp, 1);
@@ -439,8 +447,8 @@ set_dlist(const struct bu_structparse *UNUSED(sdp),
 
 		    dlp1->dm_dlist_state->dl_active = 0;
 
-		    gdlp = BU_LIST_NEXT(display_list, GEDP->ged_gdp->gd_headDisplay);
-		    while (BU_LIST_NOT_HEAD(gdlp, GEDP->ged_gdp->gd_headDisplay)) {
+		    gdlp = BU_LIST_NEXT(display_list, s->GEDP->ged_gdp->gd_headDisplay);
+		    while (BU_LIST_NOT_HEAD(gdlp, s->GEDP->ged_gdp->gd_headDisplay)) {
 			next_gdlp = BU_LIST_PNEXT(display_list, gdlp);
 
 			(void)dm_make_current(dlp1->dm_dmp);
@@ -457,7 +465,7 @@ set_dlist(const struct bu_structparse *UNUSED(sdp),
     }
 
     /* restore current display manager */
-    set_curr_dm(save_dlp);
+    set_curr_dm(s, save_dlp);
 }
 
 

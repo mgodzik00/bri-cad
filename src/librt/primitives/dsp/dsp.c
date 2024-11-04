@@ -283,26 +283,26 @@ hook_file(
 
 /** only used when editing a v4 database */
 const struct bu_structparse dsp_v4_parse[] = {
-    {"%V",	1, "file", DSP_O(dsp_name), hook_file, NULL, NULL },
-    {"%i",	1, "sm", DSP_O(dsp_smooth), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",	1, "w", DSP_O(dsp_xcnt), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",	1, "n", DSP_O(dsp_ycnt), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%f",     16, "stom", DSP_O(dsp_stom), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",	0, (char *)0, 0,	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%V",	1, "file", DSP_O(dsp_name), hook_file, NULL, NULL, NULL },
+    {"%i",	1, "sm", DSP_O(dsp_smooth), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "w", DSP_O(dsp_xcnt), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",	1, "n", DSP_O(dsp_ycnt), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f",     16, "stom", DSP_O(dsp_stom), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",	0, (char *)0, 0,	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 
 /* only used on v5 database */
 const struct bu_structparse rt_dsp_parse[] = {
-    {"%V",  1, "file", DSP_O(dsp_name), hook_file, NULL, NULL },
-    {"%V",  1, "name", DSP_O(dsp_name), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%c",  1, "src", DSP_O(dsp_datasrc), hook_verify, NULL, NULL },
-    {"%d",  1, "w",  DSP_O(dsp_xcnt), hook_verify, NULL, NULL },
-    {"%d",  1, "n",  DSP_O(dsp_ycnt), hook_verify, NULL, NULL },
-    {"%i",  1, "sm", DSP_O(dsp_smooth), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%c",  1, "cut", DSP_O(dsp_cuttype), hook_verify, NULL, NULL },
-    {"%f", 16, "stom", DSP_O(dsp_stom), hook_verify, NULL, NULL },
-    {"",    0, (char *)0, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%V",  1, "file", DSP_O(dsp_name), hook_file, NULL, NULL, NULL },
+    {"%V",  1, "name", DSP_O(dsp_name), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%c",  1, "src", DSP_O(dsp_datasrc), hook_verify, NULL, NULL, NULL },
+    {"%d",  1, "w",  DSP_O(dsp_xcnt), hook_verify, NULL, NULL, NULL },
+    {"%d",  1, "n",  DSP_O(dsp_ycnt), hook_verify, NULL, NULL, NULL },
+    {"%i",  1, "sm", DSP_O(dsp_smooth), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%c",  1, "cut", DSP_O(dsp_cuttype), hook_verify, NULL, NULL, NULL },
+    {"%f", 16, "stom", DSP_O(dsp_stom), hook_verify, NULL, NULL, NULL },
+    {"",    0, (char *)0, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 

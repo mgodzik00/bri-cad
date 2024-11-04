@@ -64,9 +64,9 @@ int rtarea_compute_centers = 0;
 
 /* Viewing module specific "set" variables */
 struct bu_structparse view_parse[] = {
-    {"%d", 1, "compute_centers", bu_byteoffset(rtarea_compute_centers), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%d", 1, "cc", bu_byteoffset(rtarea_compute_centers), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"",	0, (char *)0,	0,		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL}
+    {"%d", 1, "compute_centers", bu_byteoffset(rtarea_compute_centers), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "cc", bu_byteoffset(rtarea_compute_centers), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 

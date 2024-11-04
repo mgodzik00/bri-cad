@@ -109,16 +109,16 @@ void new_image(const struct bu_structparse *, const char *, void *, const char *
  * structure above
  */
 struct bu_structparse bbd_print_tab[] = {
-    {"%ld",  1, "w",	SHDR_O(img_width),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%ld",  1, "n",	SHDR_O(img_height),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",  1, "t",	SHDR_O(img_threshold),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g",  1, "h",	SHDR_O(img_scale),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%V",  1, "f",	SHDR_O(img_filename),	new_image, NULL, NULL },
-    {"",    0, (char *)0, 0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%ld",  1, "w",	SHDR_O(img_width),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%ld",  1, "n",	SHDR_O(img_height),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",  1, "t",	SHDR_O(img_threshold),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g",  1, "h",	SHDR_O(img_scale),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%V",  1, "f",	SHDR_O(img_filename),	new_image, NULL, NULL, NULL },
+    {"",    0, (char *)0, 0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 struct bu_structparse bbd_parse_tab[] = {
-    {"%p", 1, "bbd_print_tab", bu_byteoffset(bbd_print_tab[0]), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",	0, (char *)0,	0,		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%p", 1, "bbd_print_tab", bu_byteoffset(bbd_print_tab[0]), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",	0, (char *)0,	0,		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 

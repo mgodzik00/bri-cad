@@ -200,7 +200,7 @@ release(struct mged_state *s, char *name, int need_close)
 	if (mged_variables->mv_listen) {
 	    /* drop all clients */
 	    mged_variables->mv_listen = 0;
-	    fbserv_set_port(s, NULL, NULL, NULL, NULL, NULL);
+	    fbserv_set_port(NULL, NULL, NULL, NULL, s);
 	}
 
 	/* release framebuffer resources */

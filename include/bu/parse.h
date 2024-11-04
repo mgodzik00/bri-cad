@@ -148,6 +148,7 @@ struct bu_structparse {
 		    void *);	/**< Optional hooked function, or indir ptr */
     const char *sp_desc;		/**< description of element */
     void *sp_default;		       /**< ptr to default value */
+    void *sp_u_data;
 };
 typedef struct bu_structparse bu_structparse_t;
 #define BU_STRUCTPARSE_NULL ((struct bu_structparse *)0)
@@ -183,13 +184,14 @@ struct bu_structparse_map {
 	(_sp)->sp_hook = BU_STRUCTPARSE_FUNC_NULL; \
 	(_sp)->sp_desc = NULL; \
 	(_sp)->sp_default = NULL; \
+	(_sp)->sp_u_data = NULL; \
     }
 
 /**
  * macro suitable for declaration statement initialization of a bu_structparse
  * struct.  does not allocate memory.
  */
-#define BU_STRUCTPARSE_INIT_ZERO { {'\0', '\0', '\0', '\0'}, 0, NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+#define BU_STRUCTPARSE_INIT_ZERO { {'\0', '\0', '\0', '\0'}, 0, NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 
 /**
  * returns truthfully whether a bu_structparse struct has been

@@ -58,19 +58,19 @@ struct cook_specific {
 #define CL_O(m) bu_offsetof(struct cook_specific, m)
 
 struct bu_structparse cook_parse[] = {
-    {"%g", 1, "m",		CL_O(m),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "specular",	CL_O(wgt_specular),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "sp",		CL_O(wgt_specular),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "diffuse",	CL_O(wgt_diffuse),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "di",		CL_O(wgt_diffuse),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "transmit",	CL_O(transmit),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "tr",		CL_O(transmit),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "reflect",	CL_O(reflect),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "re",		CL_O(reflect),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "ri",		CL_O(refrac_index),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "extinction",	CL_O(extinction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%g", 1, "ex",		CL_O(extinction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",   0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%g", 1, "m",		CL_O(m),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "specular",	CL_O(wgt_specular),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "sp",		CL_O(wgt_specular),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "diffuse",	CL_O(wgt_diffuse),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "di",		CL_O(wgt_diffuse),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "transmit",	CL_O(transmit),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "tr",		CL_O(transmit),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "reflect",	CL_O(reflect),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "re",		CL_O(reflect),		BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "ri",		CL_O(refrac_index),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "extinction",	CL_O(extinction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "ex",		CL_O(extinction),	BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",   0, (char *)0,	0,			BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 

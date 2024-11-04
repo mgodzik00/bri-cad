@@ -136,11 +136,11 @@
  */
 
 const struct bu_structparse rt_tor_parse[] = {
-    {"%f", 3, "V",   bu_offsetofarray(struct rt_tor_internal, v, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%f", 3, "H",   bu_offsetofarray(struct rt_tor_internal, h, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%f", 1, "r_a", bu_offsetof(struct rt_tor_internal, r_a),  BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%f", 1, "r_h", bu_offsetof(struct rt_tor_internal, r_h),  BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {{'\0', '\0', '\0', '\0'}, 0, (char *)NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL}
+    {"%f", 3, "V",   bu_offsetofarray(struct rt_tor_internal, v, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f", 3, "H",   bu_offsetofarray(struct rt_tor_internal, h, fastf_t, X), BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f", 1, "r_a", bu_offsetof(struct rt_tor_internal, r_a),  BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f", 1, "r_h", bu_offsetof(struct rt_tor_internal, r_h),  BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {{'\0', '\0', '\0', '\0'}, 0, (char *)NULL, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 

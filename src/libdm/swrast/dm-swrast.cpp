@@ -501,10 +501,10 @@ swrast_geometry_request(struct dm *dmp, int UNUSED(width), int UNUSED(height))
 #define SWVARS_MV_O(_m) offsetof(struct dm_swvars, _m)
 
 struct bu_structparse dm_swvars_vparse[] = {
-    {"%d",      1,      "devmotionnotify",      SWVARS_MV_O(devmotionnotify),    BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",      1,      "devbuttonpress",       SWVARS_MV_O(devbuttonpress),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"%d",      1,      "devbuttonrelease",     SWVARS_MV_O(devbuttonrelease),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL },
-    {"",        0,      (char *)0,              0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL }
+    {"%d",      1,      "devmotionnotify",      SWVARS_MV_O(devmotionnotify),    BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",      1,      "devbuttonpress",       SWVARS_MV_O(devbuttonpress),     BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d",      1,      "devbuttonrelease",     SWVARS_MV_O(devbuttonrelease),   BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"",        0,      (char *)0,              0,                      BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 int

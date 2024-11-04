@@ -152,19 +152,19 @@ int a_no_booleans = -1;
  * struct shadework.
  */
 struct bu_structparse view_parse[] = {
-    {"%f", 1, "gamma", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%d", 1, "bounces", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%d", 1, "ireflect", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%d", 1, "a_onehit", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%d", 1, "a_no_booleans", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%f", ELEMENTS_PER_VECT, "background", 0, color_hook, NULL, NULL},
-    {"%d", 1, "overlay", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%d", 1, "ov", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%d", 1, "ambSamples", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%g", 1, "ambRadius", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%g", 1, "ambOffset", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"%d", 1, "ambSlow", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL},
-    {"", 0, (char *)0, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL}
+    {"%f", 1, "gamma", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "bounces", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "ireflect", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "a_onehit", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "a_no_booleans", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%f", ELEMENTS_PER_VECT, "background", 0, color_hook, NULL, NULL, NULL},
+    {"%d", 1, "overlay", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "ov", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "ambSamples", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "ambRadius", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%g", 1, "ambOffset", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"%d", 1, "ambSlow", 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL },
+    {"", 0, (char *)0, 0, BU_STRUCTPARSE_FUNC_NULL, NULL, NULL, NULL }
 };
 
 
