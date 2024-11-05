@@ -330,6 +330,9 @@ f_attach(ClientData clientData, Tcl_Interp *interpreter, int argc, const char *a
 int
 gui_setup(struct mged_state *s, const char *dstr)
 {
+    if (!s)
+	return TCL_ERROR;
+
 #ifdef HAVE_TK
     Tk_GenericProc *handler = doEvent;
 #endif
