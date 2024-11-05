@@ -92,7 +92,7 @@ common_dm(struct mged_state *s, int argc, const char *argv[])
 	    else if (mged_variables->mv_mouse_behavior == 'r')
 		rt_rect_area();
 	    else if (mged_variables->mv_mouse_behavior == 'z')
-		zoom_rect_area();
+		zoom_rect_area(s);
 	}
 
 	return TCL_OK;

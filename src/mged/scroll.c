@@ -120,7 +120,7 @@ set_scroll(void)
  * Reset all scroll bars to the zero position.
  */
 void
-sl_halt_scroll(int UNUSED(a), int UNUSED(b), int UNUSED(c))
+sl_halt_scroll(struct mged_state *UNUSED(s), int UNUSED(a), int UNUSED(b), int UNUSED(c))
 {
     struct bu_vls vls = BU_VLS_INIT_ZERO;
 

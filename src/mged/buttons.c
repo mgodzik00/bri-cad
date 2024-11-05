@@ -36,9 +36,9 @@ extern void set_scroll_private(const struct bu_structparse *, const char *, void
 
 extern int mged_svbase(void);
 extern void set_e_axes_pos(int both);
-extern int mged_zoom(double val);
+extern int mged_zoom(struct mged_state *s, double val);
 extern void set_absolute_tran(void);	/* defined in set.c */
-extern void adc_set_scroll(void);	/* defined in adc.c */
+extern void adc_set_scroll(struct mged_state *s);	/* defined in adc.c */
 
 /* forward declarations for the buttons table */
 int be_accept(ClientData, Tcl_Interp *, int, char **);
@@ -345,17 +345,24 @@ label_button(int bnum)
 
 
 int
-bv_zoomin(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_zoomin(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
-    (void)mged_zoom(2.0);
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+    (void)mged_zoom(s, 2.0);
     return TCL_OK;
 }
 
 
 int
-bv_zoomout(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_zoomout(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
-    (void)mged_zoom(0.5);
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
+    (void)mged_zoom(s, 0.5);
     return TCL_OK;
 }
 
@@ -490,8 +497,12 @@ bv_vsave(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(a
  * can't be bound as "adc", only as "press adc".
  */
 int
-bv_adcursor(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
+bv_adcursor(ClientData clientData, Tcl_Interp *UNUSED(interp), int UNUSED(argc), char *UNUSED(argv[]))
 {
+    struct cmdtab *ctp = (struct cmdtab *)clientData;
+    MGED_CK_CMD(ctp);
+    struct mged_state *s = ctp->s;
+
     if (adc_state->adc_draw) {
 	/* Was on, turn off */
 	adc_state->adc_draw = 0;
@@ -500,7 +511,7 @@ bv_adcursor(ClientData UNUSED(clientData), Tcl_Interp *UNUSED(interp), int UNUSE
 	adc_state->adc_draw = 1;
     }
 
-    adc_set_scroll();
+    adc_set_scroll(s);
     return TCL_OK;
 }
 

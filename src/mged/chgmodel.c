@@ -48,7 +48,7 @@
 
 
 /* defined in chgview.c */
-extern int edit_com(int argc, const char *argv[]);
+extern int edit_com(struct mged_state *s, int argc, const char *argv[]);
 
 /* defined in buttons.c */
 extern int be_s_trans(ClientData, Tcl_Interp *, int, char **);
@@ -113,7 +113,7 @@ f_make(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[])
 	av[1] = "-R";
 	av[2] = argv[argc-2];
 	av[3] = NULL;
-	edit_com(3, av);
+	edit_com(s, 3, av);
     } else {
 	return TCL_ERROR;
     }

@@ -609,7 +609,7 @@ void screen_vls(int xbase, int ybase, struct bu_vls *vp);
 void dotitles(struct bu_vls *overlay_vls);
 
 /* rect.c */
-void zoom_rect_area(void);
+void zoom_rect_area(struct mged_state *);
 void paint_rect_area(void);
 void rt_rect_area(void);
 void draw_rect(void);
