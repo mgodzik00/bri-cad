@@ -115,6 +115,8 @@ fbserv_drop_client(int sub)
  * support elimination of globals down the road. */
 struct c_data {
     int fd;
+    Tcl_Channel chan;
+    struct mged_dm * dlp;
     struct mged_state *s;
 };
 
@@ -232,7 +234,9 @@ fbserv_new_client_handler(ClientData clientData,
 			  char *host,
 			  int port)
 {
-    struct mged_dm *dlp = (struct mged_dm *)clientData;
+    struct c_data *d = (struct c_data *)clientData;
+ 
+    // TODO - fix struct mged_dm *dlp = (struct mged_dm *)clientData;
     struct mged_dm *scdlp;  /* save current dm_list pointer */
     uintptr_t fd;
 
@@ -242,13 +246,13 @@ fbserv_new_client_handler(ClientData clientData,
     /* save */
     scdlp = mged_curr_dm;
 
-    set_curr_dm(s, dlp);
+    set_curr_dm(d->s, dlp);
 
-    if (Tcl_GetChannelHandle(chan, TCL_READABLE, (ClientData *)&fd) == TCL_OK)
-	fbserv_new_client(fbserv_makeconn((int)fd, pkg_switch), chan);
+    if (Tcl_GetChannelHandle(d->chan, TCL_READABLE, (ClientData *)&fd) == TCL_OK)
+	fbserv_new_client(fbserv_makeconn((int)fd, pkg_switch), d->chan);
 
     /* restore */
-    set_curr_dm(s, scdlp);
+    set_curr_dm(d->s, scdlp);
 }
 
 
